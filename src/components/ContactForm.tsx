@@ -35,7 +35,7 @@ export function ContactForm() {
   }
 
   return (
-    <Section id="contact" eyebrow="Get in touch" title="Let's work together">
+    <Section id="contact" number="06" title="let's work together">
       <p className="mb-6 max-w-xl text-sm text-muted">
         Open to Quality Assurance, Data Analysis, and software engineering roles. Send a
         message here, or email me directly at{" "}
@@ -62,11 +62,15 @@ export function ContactForm() {
           </label>
           <input
             id="name"
+            aria-invalid={!!errors.name}
+            aria-describedby={errors.name ? "name-error" : undefined}
             className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent"
             {...register("name")}
           />
           {errors.name && (
-            <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>
+            <p id="name-error" role="alert" className="mt-1 text-xs text-red-500">
+              {errors.name.message}
+            </p>
           )}
         </div>
 
@@ -77,11 +81,15 @@ export function ContactForm() {
           <input
             id="email"
             type="email"
+            aria-invalid={!!errors.email}
+            aria-describedby={errors.email ? "email-error" : undefined}
             className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent"
             {...register("email")}
           />
           {errors.email && (
-            <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>
+            <p id="email-error" role="alert" className="mt-1 text-xs text-red-500">
+              {errors.email.message}
+            </p>
           )}
         </div>
 
@@ -92,11 +100,15 @@ export function ContactForm() {
           <textarea
             id="message"
             rows={5}
+            aria-invalid={!!errors.message}
+            aria-describedby={errors.message ? "message-error" : undefined}
             className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent"
             {...register("message")}
           />
           {errors.message && (
-            <p className="mt-1 text-xs text-red-500">{errors.message.message}</p>
+            <p id="message-error" role="alert" className="mt-1 text-xs text-red-500">
+              {errors.message.message}
+            </p>
           )}
         </div>
 

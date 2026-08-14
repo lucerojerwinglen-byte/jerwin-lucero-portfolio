@@ -28,11 +28,9 @@ export default async function BlogPostPage({
   if (!post) notFound();
 
   return (
-    <article className="mx-auto max-w-3xl px-6 py-16">
-      <p className="text-xs text-muted">{post.date}</p>
-      <h1 className="mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">
-        {post.title}
-      </h1>
+    <article className="mx-auto max-w-2xl px-6 py-16">
+      <p className="font-mono text-[12px] text-gray-500">{post.date}</p>
+      <h1 className="mt-2 font-pixel text-2xl leading-tight sm:text-[2rem]">{post.title}</h1>
       <div className="prose prose-neutral mt-8 max-w-none dark:prose-invert">
         <MDXRemote source={post.content} />
       </div>

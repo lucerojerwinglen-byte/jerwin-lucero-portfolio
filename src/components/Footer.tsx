@@ -2,8 +2,8 @@ import { site } from "@/content/data/site";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border py-10">
-      <div className="mx-auto flex max-w-4xl flex-col items-center gap-3 px-6 text-sm text-muted sm:flex-row sm:justify-between">
+    <footer className="border-t border-gray-200 py-10">
+      <div className="mx-auto flex max-w-2xl flex-col items-center gap-3 px-6 font-mono text-[12px] text-gray-500 sm:flex-row sm:justify-between">
         <p>
           &copy; {new Date().getFullYear()} {site.name}
         </p>
@@ -12,11 +12,11 @@ export function Footer() {
             href={site.social.github}
             target="_blank"
             rel="noreferrer"
-            className="hover:text-foreground"
+            className="hover:text-ink"
           >
-            GitHub
+            github ↗
           </a>
-          <a href={`mailto:${site.email}`} className="hover:text-foreground">
+          <a href={`mailto:${site.email}`} className="hover:text-ink">
             {site.email}
           </a>
         </div>

@@ -39,8 +39,8 @@ export function PresenceIndicator() {
   if (count === null) return null;
 
   return (
-    <span className="hidden items-center gap-1.5 rounded-full border border-border px-2.5 py-1 text-xs text-muted sm:flex">
-      <Circle className="h-2 w-2 fill-emerald-500 text-emerald-500" />
+    <span className="inline-flex items-center gap-1.5 font-mono text-[12px] text-gray-500">
+      <Circle className="pulse-dot h-2 w-2 fill-emerald-500 text-emerald-500" />
       {count} {count === 1 ? "person" : "people"} viewing
     </span>
   );

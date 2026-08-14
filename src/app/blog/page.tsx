@@ -10,20 +10,18 @@ export default function BlogIndexPage() {
   const posts = getAllPosts();
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-16">
-      <h1 className="mb-10 text-2xl font-semibold tracking-tight sm:text-3xl">
-        Blog
-      </h1>
-      <div className="space-y-6">
+    <div className="mx-auto max-w-2xl px-6 py-16">
+      <h1 className="reveal font-pixel text-sm text-gray-500">01 — blog</h1>
+      <div className="mt-6">
         {posts.map((post) => (
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
-            className="block rounded-xl border border-border bg-card p-5 transition-colors hover:border-accent"
+            className="block border-t border-gray-200 py-5 first:border-t-0 first:pt-0"
           >
-            <p className="text-xs text-muted">{post.date}</p>
-            <h2 className="mt-1 font-medium">{post.title}</h2>
-            <p className="mt-2 text-sm text-muted">{post.excerpt}</p>
+            <p className="font-mono text-[12px] text-gray-500">{post.date}</p>
+            <h2 className="mt-1 font-medium text-ink">{post.title}</h2>
+            <p className="mt-2 text-sm leading-relaxed text-gray-600">{post.excerpt}</p>
           </Link>
         ))}
       </div>

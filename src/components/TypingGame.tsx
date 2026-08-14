@@ -84,7 +84,7 @@ export function TypingGame() {
   }
 
   return (
-    <Section id="typing-test" eyebrow="Just for fun" title="Typing speed test">
+    <Section id="typing-test" number="05" title="typing speed test">
       <p className="mb-4 text-sm text-muted">
         Nudge the dot with <kbd className="rounded border border-border px-1">W</kbd>{" "}
         <kbd className="rounded border border-border px-1">A</kbd>{" "}
