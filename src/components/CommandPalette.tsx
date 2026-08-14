@@ -54,7 +54,7 @@ export function CommandPalette() {
     >
       <Command.Input
         placeholder="Type a command or search..."
-        className="w-full border-b border-border bg-transparent px-4 py-3 text-sm outline-none placeholder:text-muted"
+        className="w-full border-b border-border bg-transparent px-4 py-3 text-sm outline-none focus:border-accent placeholder:text-muted"
       />
       <Command.List className="max-h-80 overflow-y-auto p-2">
         <Command.Empty className="p-4 text-sm text-muted">

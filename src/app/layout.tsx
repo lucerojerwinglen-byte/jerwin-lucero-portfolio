@@ -19,8 +19,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: `${site.shortName} — ${site.title}`,
+  metadataBase: new URL(site.url),
+  title: {
+    default: `${site.shortName} — ${site.title}`,
+    template: `%s — ${site.shortName}`,
+  },
   description: site.tagline,
+  openGraph: {
+    title: `${site.shortName} — ${site.title}`,
+    description: site.tagline,
+    url: site.url,
+    siteName: site.shortName,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${site.shortName} — ${site.title}`,
+    description: site.tagline,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -32,8 +48,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
+          >
+            Skip to content
+          </a>
           <Nav />
-          <main className="flex-1">{children}</main>
+          <main id="main-content" className="flex-1">
+            {children}
+          </main>
           <Footer />
           <CommandPalette />
           <Toaster richColors position="bottom-right" />

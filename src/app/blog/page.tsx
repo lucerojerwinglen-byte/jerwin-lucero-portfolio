@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { getAllPosts } from "@/lib/blog";
 
 export const metadata: Metadata = {
-  title: "Blog — Jerwin Lucero",
+  title: "Blog",
 };
 
 export default function BlogIndexPage() {

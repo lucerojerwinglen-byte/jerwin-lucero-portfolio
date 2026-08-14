@@ -1,4 +1,5 @@
 export const site = {
+  url: "https://jerwinlucero.vercel.app",
   name: "Jerwin Glen A. Lucero",
   shortName: "Jerwin Lucero",
   title: "Computer Science Graduate",

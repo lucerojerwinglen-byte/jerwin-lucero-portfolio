@@ -16,7 +16,9 @@ function randomSnippet(exclude?: string) {
 }
 
 export function TypingGame() {
-  const [target, setTarget] = useState(() => randomSnippet());
+  // Deterministic on first render (server and client must match); randomized
+  // after mount so every page load doesn't show the same snippet.
+  const [target, setTarget] = useState(typingSnippets[0]);
   const [typed, setTyped] = useState("");
   const [startedAt, setStartedAt] = useState<number | null>(null);
   const [finished, setFinished] = useState(false);
@@ -26,9 +28,11 @@ export function TypingGame() {
 
   useEffect(() => {
     const stored = localStorage.getItem(BEST_WPM_KEY);
-    // One-time hydration of a value that only lives in localStorage.
+    // One-time hydration of values that only exist client-side (localStorage,
+    // and the randomized snippet — see comment on `target` above).
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (stored) setBestWpm(Number(stored));
+    setTarget(randomSnippet());
   }, []);
 
   const { wpm, accuracy } = useMemo(() => {

@@ -15,7 +15,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) return {};
-  return { title: `${post.title} — Jerwin Lucero`, description: post.excerpt };
+  return { title: post.title, description: post.excerpt };
 }
 
 export default async function BlogPostPage({
