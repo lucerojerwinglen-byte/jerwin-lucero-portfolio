@@ -3,24 +3,35 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import {
+  Menu,
+  X,
+  User,
+  FolderGit2,
+  Briefcase,
+  Terminal,
+  Award,
+  Keyboard,
+  Newspaper,
+  Handshake,
+} from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { PresenceIndicator } from "@/components/PresenceIndicator";
 import { site } from "@/content/data/site";
 import { cn } from "@/lib/utils";
 
 const sectionLinks = [
-  { id: "about", label: "About" },
-  { id: "projects", label: "Projects" },
-  { id: "experience", label: "Experience" },
-  { id: "skills", label: "Stack" },
-  { id: "credentials", label: "Certifications" },
-  { id: "typing-test", label: "Typing test" },
+  { id: "about", label: "About", icon: User, number: null },
+  { id: "projects", label: "Projects", icon: FolderGit2, number: "01" },
+  { id: "experience", label: "Experience", icon: Briefcase, number: "02" },
+  { id: "skills", label: "Stack", icon: Terminal, number: "03" },
+  { id: "credentials", label: "Certifications", icon: Award, number: "04" },
+  { id: "typing-test", label: "Typing test", icon: Keyboard, number: "05" },
 ];
 
 const utilityLinks = [
-  { href: "/blog", label: "Blog" },
-  { href: "/#contact", label: "Hire me" },
+  { href: "/blog", label: "Blog", icon: Newspaper },
+  { href: "/#contact", label: "Hire me", icon: Handshake },
 ];
 
 export function Nav() {
@@ -66,18 +77,25 @@ export function Nav() {
         <div className="mt-9 flex flex-1 flex-col gap-1 overflow-y-auto overflow-x-hidden font-mono text-[13px]">
           {isHome && (
             <div className="flex flex-col gap-0.5">
-              {sectionLinks.map((link) => (
-                <a
-                  key={link.id}
-                  href={`#${link.id}`}
-                  className={cn(
-                    "-mx-2 rounded-md px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-ink",
-                    activeSection === link.id && "text-ink"
-                  )}
-                >
-                  {link.label}
-                </a>
-              ))}
+              {sectionLinks.map((link) => {
+                const isActive = activeSection === link.id;
+                return (
+                  <a
+                    key={link.id}
+                    href={`#${link.id}`}
+                    className={cn(
+                      "-mx-2 flex items-center gap-2 rounded-md px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-ink",
+                      isActive && "text-ink"
+                    )}
+                  >
+                    <link.icon className="h-3.5 w-3.5 shrink-0" />
+                    <span className="flex-1">{link.label}</span>
+                    {isActive && link.number && (
+                      <span className="font-pixel text-[10px] text-gray-400">{link.number}</span>
+                    )}
+                  </a>
+                );
+              })}
             </div>
           )}
 
@@ -88,8 +106,9 @@ export function Nav() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="-mx-2 rounded-md px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-ink"
+                className="-mx-2 flex items-center gap-2 rounded-md px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-ink"
               >
+                <link.icon className="h-3.5 w-3.5 shrink-0" />
                 {link.label}
               </Link>
             ))}
@@ -148,8 +167,9 @@ export function Nav() {
                     key={link.id}
                     href={`#${link.id}`}
                     onClick={() => setOpen(false)}
-                    className="rounded-md px-2 py-2.5 text-gray-700 hover:bg-gray-50 hover:text-ink"
+                    className="flex items-center gap-2.5 rounded-md px-2 py-2.5 text-gray-700 hover:bg-gray-50 hover:text-ink"
                   >
+                    <link.icon className="h-4 w-4 shrink-0" />
                     {link.label}
                   </a>
                 ))}
@@ -162,8 +182,9 @@ export function Nav() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="rounded-md px-2 py-2.5 text-gray-700 hover:bg-gray-50 hover:text-ink"
+                  className="flex items-center gap-2.5 rounded-md px-2 py-2.5 text-gray-700 hover:bg-gray-50 hover:text-ink"
                 >
+                  <link.icon className="h-4 w-4 shrink-0" />
                   {link.label}
                 </Link>
               ))}

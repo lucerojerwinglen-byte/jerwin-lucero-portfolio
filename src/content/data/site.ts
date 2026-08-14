@@ -2,12 +2,13 @@ export const site = {
   url: "https://jerwinlucero.vercel.app",
   name: "Jerwin Glen A. Lucero",
   shortName: "Jerwin Lucero",
-  title: "Computer Science Graduate",
-  tagline: "CS grad building things end to end — QA, data, and a bit of AI along the way.",
-  location: "Ligao City, Albay, Philippines",
+  title: "Workday Transactions Analyst",
+  tagline:
+    "Workday Transactions Analyst at Sagility, still building in QA, data, and AI on the side.",
+  location: "Pasig City, Metro Manila, Philippines",
   email: "jerwinglen0427@gmail.com",
   summary:
-    "Detail-oriented and motivated Computer Science graduate with a strong foundation in software engineering, software testing (pytest), and troubleshooting. Skilled in problem-solving, system optimization, and effective team collaboration, with excellent communication skills in English and Filipino. Eager to contribute to Quality Assurance, Data Analysis, or related roles.",
+    "Workday Transactions Analyst at Sagility, executing HR systems transactions with a strong foundation in software engineering, software testing (pytest), and troubleshooting from my Computer Science background. Skilled in problem-solving, system optimization, and effective team collaboration, with excellent communication skills in English and Filipino. Continuing to build in Quality Assurance, Data Analysis, and software engineering on the side.",
   social: {
     github: "https://github.com/lucerojerwinglen-byte",
   },

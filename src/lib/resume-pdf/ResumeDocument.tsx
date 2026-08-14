@@ -60,7 +60,10 @@ export function ResumeDocument() {
                 <Text style={styles.itemTitle}>
                   {item.role} — {item.org}
                 </Text>
-                <Text style={styles.itemMeta}>{item.period}</Text>
+                <Text style={styles.itemMeta}>
+                  {item.period}
+                  {item.location ? ` · ${item.location}` : ""}
+                </Text>
               </View>
               {item.bullets.map((b) => (
                 <Text key={b} style={styles.bullet}>

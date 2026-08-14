@@ -5,16 +5,31 @@ import { Command } from "cmdk";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
+import {
+  Search,
+  User,
+  FolderGit2,
+  Briefcase,
+  Terminal,
+  Award,
+  Keyboard,
+  Mail,
+  Newspaper,
+  Download,
+  SunMoon,
+  Copy,
+} from "lucide-react";
+import { GithubIcon } from "@/components/icons/GithubIcon";
 import { site } from "@/content/data/site";
 
 const sections = [
-  { id: "about", label: "About" },
-  { id: "projects", label: "Projects" },
-  { id: "experience", label: "Experience" },
-  { id: "skills", label: "Stack" },
-  { id: "credentials", label: "Certifications & Seminars" },
-  { id: "typing-test", label: "Typing Speed Test" },
-  { id: "contact", label: "Contact" },
+  { id: "about", label: "About", icon: User },
+  { id: "projects", label: "Projects", icon: FolderGit2 },
+  { id: "experience", label: "Experience", icon: Briefcase },
+  { id: "skills", label: "Stack", icon: Terminal },
+  { id: "credentials", label: "Certifications & Seminars", icon: Award },
+  { id: "typing-test", label: "Typing Speed Test", icon: Keyboard },
+  { id: "contact", label: "Contact", icon: Mail },
 ];
 
 export function CommandPalette() {
@@ -52,10 +67,13 @@ export function CommandPalette() {
       label="Command Menu"
       className="fixed left-1/2 top-24 z-50 w-[min(560px,90vw)] -translate-x-1/2 overflow-hidden rounded-xl border border-border bg-background shadow-2xl"
     >
-      <Command.Input
-        placeholder="Type a command or search..."
-        className="w-full border-b border-border bg-transparent px-4 py-3 text-sm outline-none focus:border-accent placeholder:text-muted"
-      />
+      <div className="relative border-b border-border">
+        <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+        <Command.Input
+          placeholder="Type a command or search..."
+          className="w-full bg-transparent py-3 pl-11 pr-4 text-sm outline-none focus:border-accent placeholder:text-muted"
+        />
+      </div>
       <Command.List className="max-h-80 overflow-y-auto p-2">
         <Command.Empty className="p-4 text-sm text-muted">
           No results found.
@@ -69,8 +87,9 @@ export function CommandPalette() {
             <Command.Item
               key={s.id}
               onSelect={() => goToSection(s.id)}
-              className="cursor-pointer rounded-md px-2 py-2 text-sm data-[selected=true]:bg-card"
+              className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-2 text-sm data-[selected=true]:bg-card"
             >
+              <s.icon className="h-4 w-4 text-muted" />
               {s.label}
             </Command.Item>
           ))}
@@ -85,8 +104,9 @@ export function CommandPalette() {
               setOpen(false);
               router.push("/blog");
             }}
-            className="cursor-pointer rounded-md px-2 py-2 text-sm data-[selected=true]:bg-card"
+            className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-2 text-sm data-[selected=true]:bg-card"
           >
+            <Newspaper className="h-4 w-4 text-muted" />
             View all posts
           </Command.Item>
         </Command.Group>
@@ -100,8 +120,9 @@ export function CommandPalette() {
               setOpen(false);
               window.open(site.resumePdfPath, "_blank");
             }}
-            className="cursor-pointer rounded-md px-2 py-2 text-sm data-[selected=true]:bg-card"
+            className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-2 text-sm data-[selected=true]:bg-card"
           >
+            <Download className="h-4 w-4 text-muted" />
             Download resume (PDF)
           </Command.Item>
           <Command.Item
@@ -109,8 +130,9 @@ export function CommandPalette() {
               setTheme(resolvedTheme === "dark" ? "light" : "dark");
               setOpen(false);
             }}
-            className="cursor-pointer rounded-md px-2 py-2 text-sm data-[selected=true]:bg-card"
+            className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-2 text-sm data-[selected=true]:bg-card"
           >
+            <SunMoon className="h-4 w-4 text-muted" />
             Toggle light / dark theme
           </Command.Item>
           <Command.Item
@@ -119,8 +141,9 @@ export function CommandPalette() {
               toast.success("Email copied to clipboard");
               setOpen(false);
             }}
-            className="cursor-pointer rounded-md px-2 py-2 text-sm data-[selected=true]:bg-card"
+            className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-2 text-sm data-[selected=true]:bg-card"
           >
+            <Copy className="h-4 w-4 text-muted" />
             Copy email address
           </Command.Item>
         </Command.Group>
@@ -134,8 +157,9 @@ export function CommandPalette() {
               setOpen(false);
               window.open(site.social.github, "_blank");
             }}
-            className="cursor-pointer rounded-md px-2 py-2 text-sm data-[selected=true]:bg-card"
+            className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-2 text-sm data-[selected=true]:bg-card"
           >
+            <GithubIcon className="h-4 w-4 text-muted" />
             Open GitHub profile
           </Command.Item>
         </Command.Group>

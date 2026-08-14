@@ -1,3 +1,5 @@
+import { Mail } from "lucide-react";
+import { GithubIcon } from "@/components/icons/GithubIcon";
 import { site } from "@/content/data/site";
 
 export function Footer() {
@@ -12,11 +14,16 @@ export function Footer() {
             href={site.social.github}
             target="_blank"
             rel="noreferrer"
-            className="hover:text-ink"
+            className="inline-flex items-center gap-1.5 hover:text-ink"
           >
+            <GithubIcon className="h-3.5 w-3.5" />
             github ↗
           </a>
-          <a href={`mailto:${site.email}`} className="hover:text-ink">
+          <a
+            href={`mailto:${site.email}`}
+            className="inline-flex items-center gap-1.5 hover:text-ink"
+          >
+            <Mail className="h-3.5 w-3.5" />
             {site.email}
           </a>
         </div>

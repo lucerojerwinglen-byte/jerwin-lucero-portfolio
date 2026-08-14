@@ -1,28 +1,61 @@
+"use client";
+
 import Image from "next/image";
+import { useRef, useState } from "react";
 import { Download, Mail } from "lucide-react";
+import { GithubIcon } from "@/components/icons/GithubIcon";
 import { site } from "@/content/data/site";
 
+const MAX_TILT_DEG = 6;
+
 export function Hero() {
+  const tiltRef = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const el = tiltRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width - 0.5;
+    const py = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({ x: py * -MAX_TILT_DEG, y: px * MAX_TILT_DEG });
+  }
+
+  function handleMouseLeave() {
+    setTilt({ x: 0, y: 0 });
+  }
+
   return (
     <section id="about" className="relative scroll-mt-24 pb-16 pt-14 sm:pt-20">
       <div className="mx-auto max-w-2xl px-6">
         <div className="grid gap-9 sm:grid-cols-[13rem_1fr] sm:items-start sm:gap-10">
           <div className="reveal d1 mx-auto w-full max-w-[13rem] sm:mx-0">
-            <div className="relative">
-              <Image
-                src="/images/jerwin-hero.jpg"
-                alt={site.name}
-                width={800}
-                height={1000}
-                priority
-                sizes="(min-width: 640px) 208px, 176px"
-                className="block aspect-[4/5] w-full select-none rounded-2xl object-cover object-top"
-                draggable={false}
-              />
+            <div
+              ref={tiltRef}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              className="[perspective:800px]"
+            >
               <div
-                aria-hidden="true"
-                className="halftone-white mask-up pointer-events-none absolute inset-x-0 bottom-0 h-full rounded-2xl"
-              />
+                className="relative transition-transform duration-200 ease-out will-change-transform"
+                style={{ transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}
+              >
+                <Image
+                  src="/images/jerwin-hero.jpg"
+                  alt={site.name}
+                  width={800}
+                  height={1000}
+                  priority
+                  sizes="(min-width: 640px) 208px, 176px"
+                  className="block aspect-[4/5] w-full select-none rounded-2xl object-cover object-top"
+                  draggable={false}
+                />
+                <div
+                  aria-hidden="true"
+                  className="halftone-white mask-up pointer-events-none absolute inset-x-0 bottom-0 h-full rounded-2xl"
+                />
+              </div>
             </div>
           </div>
 
@@ -61,11 +94,16 @@ export function Hero() {
                 href={site.social.github}
                 target="_blank"
                 rel="noreferrer"
-                className="hover:text-ink"
+                className="inline-flex items-center gap-1.5 hover:text-ink"
               >
+                <GithubIcon className="h-3.5 w-3.5" />
                 github ↗
               </a>
-              <a href={`mailto:${site.email}`} className="hover:text-ink">
+              <a
+                href={`mailto:${site.email}`}
+                className="inline-flex items-center gap-1.5 hover:text-ink"
+              >
+                <Mail className="h-3.5 w-3.5" />
                 email ↗
               </a>
               <span className="text-gray-300">·</span>

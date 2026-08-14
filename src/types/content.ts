@@ -12,6 +12,7 @@ export interface ExperienceItem {
   org: string;
   role: string;
   period: string;
+  location?: string;
   bullets: string[];
 }
 

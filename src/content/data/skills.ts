@@ -15,7 +15,7 @@ export const skills: SkillGroup[] = [
   },
   {
     category: "Tools & Platforms",
-    items: ["Git & GitHub", "WordPress", "Windows OS", "MS Office"],
+    items: ["Workday", "HRIS", "Git & GitHub", "WordPress", "Windows OS", "MS Office"],
   },
   {
     category: "General",
@@ -23,6 +23,7 @@ export const skills: SkillGroup[] = [
       "Bilingual (English & Filipino)",
       "Team Collaboration",
       "System Optimization",
+      "SLA-driven Operations",
       "Continuous Learning",
     ],
   },

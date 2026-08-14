@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Send } from "lucide-react";
+import { Send, User, Mail, MessageSquare } from "lucide-react";
 import { Section } from "@/components/Section";
 import { contactFormSchema, type ContactFormValues } from "@/lib/validation";
 import { site } from "@/content/data/site";
@@ -57,7 +57,8 @@ export function ContactForm() {
         />
 
         <div>
-          <label htmlFor="name" className="mb-1 block text-sm font-medium">
+          <label htmlFor="name" className="mb-1 flex items-center gap-1.5 text-sm font-medium">
+            <User className="h-3.5 w-3.5 text-muted" />
             Name
           </label>
           <input
@@ -75,7 +76,8 @@ export function ContactForm() {
         </div>
 
         <div>
-          <label htmlFor="email" className="mb-1 block text-sm font-medium">
+          <label htmlFor="email" className="mb-1 flex items-center gap-1.5 text-sm font-medium">
+            <Mail className="h-3.5 w-3.5 text-muted" />
             Email
           </label>
           <input
@@ -94,7 +96,8 @@ export function ContactForm() {
         </div>
 
         <div>
-          <label htmlFor="message" className="mb-1 block text-sm font-medium">
+          <label htmlFor="message" className="mb-1 flex items-center gap-1.5 text-sm font-medium">
+            <MessageSquare className="h-3.5 w-3.5 text-muted" />
             Message
           </label>
           <textarea

@@ -213,6 +213,23 @@ html.theme-anim *::after {
   }
 }
 
+/* ── Scroll-triggered entrance (below-the-fold sections) ─────────── */
+.reveal-scroll {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.reveal-scroll.in-view {
+  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-scroll {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* ── theme switcher ───────────────────────────── */
 .theme-switch {
   display: inline-flex;

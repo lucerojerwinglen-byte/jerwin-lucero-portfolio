@@ -1,3 +1,4 @@
+import { Building2, GraduationCap } from "lucide-react";
 import { Section } from "@/components/Section";
 import { experience } from "@/content/data/experience";
 import { education } from "@/content/data/education";
@@ -9,10 +10,14 @@ export function ExperienceSection() {
         {experience.map((item) => (
           <div key={item.org} className="border-t border-gray-200 pt-5 first:border-t-0 first:pt-0">
             <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-              <h3 className="font-medium text-ink">
+              <h3 className="flex items-center gap-2 font-medium text-ink">
+                <Building2 className="h-4 w-4 shrink-0 text-gray-500" />
                 {item.role} · {item.org}
               </h3>
-              <span className="font-mono text-[12px] text-gray-500">{item.period}</span>
+              <span className="font-mono text-[12px] text-gray-500">
+                {item.period}
+                {item.location && ` · ${item.location}`}
+              </span>
             </div>
             <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-gray-600">
               {item.bullets.map((bullet) => (
@@ -23,7 +28,8 @@ export function ExperienceSection() {
         ))}
       </div>
 
-      <h3 className="mb-1 font-mono text-[12px] uppercase tracking-wide text-gray-500">
+      <h3 className="mb-1 flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wide text-gray-500">
+        <GraduationCap className="h-3.5 w-3.5" />
         Education
       </h3>
       <div>
