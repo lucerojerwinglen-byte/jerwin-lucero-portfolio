@@ -65,7 +65,8 @@ export function CommandPalette() {
       open={open}
       onOpenChange={setOpen}
       label="Command Menu"
-      className="fixed left-1/2 top-24 z-50 w-[min(560px,90vw)] -translate-x-1/2 overflow-hidden rounded-xl border border-border bg-background shadow-2xl"
+      overlayClassName="fixed inset-0 z-50 bg-black/40 opacity-0 transition-opacity duration-200 ease-[var(--ease-out)] data-[state=open]:opacity-100 data-[state=closed]:duration-150"
+      contentClassName="fixed left-1/2 top-24 z-50 w-[min(560px,90vw)] -translate-x-1/2 origin-top scale-95 overflow-hidden rounded-xl border border-border bg-background opacity-0 shadow-2xl transition-[opacity,transform] duration-200 ease-[var(--ease-out)] motion-reduce:scale-100 data-[state=open]:scale-100 data-[state=open]:opacity-100 data-[state=closed]:duration-150"
     >
       <div className="relative border-b border-border">
         <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />

@@ -34,11 +34,26 @@ const utilityLinks = [
   { href: "/#contact", label: "Hire me", icon: Handshake },
 ];
 
+const MENU_EXIT_MS = 180;
+
 export function Nav() {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const [open, setOpen] = useState(false);
+  const [renderMenu, setRenderMenu] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
+
+  function openMenu() {
+    setRenderMenu(true);
+    // Mount first, then flip to the open state on the next frame so the
+    // enter transition actually runs instead of starting already-open.
+    requestAnimationFrame(() => requestAnimationFrame(() => setOpen(true)));
+  }
+
+  function closeMenu() {
+    setOpen(false);
+    setTimeout(() => setRenderMenu(false), MENU_EXIT_MS);
+  }
 
   useEffect(() => {
     if (!isHome) return;
@@ -134,63 +149,87 @@ export function Nav() {
           </Link>
           <button
             type="button"
-            className="-mr-2.5 flex h-11 w-11 items-center justify-center text-gray-700 hover:text-ink"
+            className="relative -mr-2.5 flex h-11 w-11 items-center justify-center text-gray-700 hover:text-ink"
             aria-label="Toggle menu"
-            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            onClick={() => (open ? closeMenu() : openMenu())}
           >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            <Menu
+              className={cn(
+                "absolute h-5 w-5 transition-[opacity,transform] duration-150 ease-[var(--ease-out)]",
+                open ? "rotate-45 opacity-0" : "rotate-0 opacity-100"
+              )}
+            />
+            <X
+              className={cn(
+                "absolute h-5 w-5 transition-[opacity,transform] duration-150 ease-[var(--ease-out)]",
+                open ? "rotate-0 opacity-100" : "-rotate-45 opacity-0"
+              )}
+            />
           </button>
         </div>
       </header>
 
       {/* ── Mobile full-screen nav ── */}
-      {open && (
-        <div className="fixed inset-0 z-[60] flex flex-col bg-background lg:hidden">
-          <div className="flex items-center justify-between border-b border-gray-200 px-6 py-3">
-            <Link href="/" className="font-pixel text-[14px]" onClick={() => setOpen(false)}>
-              {site.shortName}
-            </Link>
-            <button
-              type="button"
-              className="-mr-2.5 flex h-11 w-11 items-center justify-center text-gray-700 hover:text-ink"
-              aria-label="Close menu"
-              onClick={() => setOpen(false)}
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-          <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden px-5 py-8 font-mono text-[16px]">
-            {isHome && (
+      {renderMenu && (
+        <div
+          className={cn(
+            "fixed inset-0 z-[60] flex flex-col bg-background opacity-0 transition-opacity duration-150 ease-[var(--ease-out)] lg:hidden",
+            open && "opacity-100"
+          )}
+        >
+          <div
+            className={cn(
+              "flex flex-1 flex-col opacity-0 transition-[opacity,transform] duration-200 ease-[var(--ease-out)] motion-reduce:translate-y-0",
+              open ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0"
+            )}
+          >
+            <div className="flex items-center justify-between border-b border-gray-200 px-6 py-3">
+              <Link href="/" className="font-pixel text-[14px]" onClick={closeMenu}>
+                {site.shortName}
+              </Link>
+              <button
+                type="button"
+                className="-mr-2.5 flex h-11 w-11 items-center justify-center text-gray-700 hover:text-ink"
+                aria-label="Close menu"
+                onClick={closeMenu}
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden px-5 py-8 font-mono text-[16px]">
+              {isHome && (
+                <div className="flex flex-col gap-1">
+                  {sectionLinks.map((link) => (
+                    <a
+                      key={link.id}
+                      href={`#${link.id}`}
+                      onClick={closeMenu}
+                      className="flex items-center gap-2.5 rounded-md px-2 py-2.5 text-gray-700 hover:bg-gray-50 hover:text-ink"
+                    >
+                      <link.icon className="h-4 w-4 shrink-0" />
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+              <div className="my-6 h-px bg-gray-200" />
               <div className="flex flex-col gap-1">
-                {sectionLinks.map((link) => (
-                  <a
-                    key={link.id}
-                    href={`#${link.id}`}
-                    onClick={() => setOpen(false)}
+                {utilityLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={closeMenu}
                     className="flex items-center gap-2.5 rounded-md px-2 py-2.5 text-gray-700 hover:bg-gray-50 hover:text-ink"
                   >
                     <link.icon className="h-4 w-4 shrink-0" />
                     {link.label}
-                  </a>
+                  </Link>
                 ))}
               </div>
-            )}
-            <div className="my-6 h-px bg-gray-200" />
-            <div className="flex flex-col gap-1">
-              {utilityLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="flex items-center gap-2.5 rounded-md px-2 py-2.5 text-gray-700 hover:bg-gray-50 hover:text-ink"
-                >
-                  <link.icon className="h-4 w-4 shrink-0" />
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-            <div className="mt-auto flex items-center gap-2 pt-8">
-              <ThemeToggle />
+              <div className="mt-auto flex items-center gap-2 pt-8">
+                <ThemeToggle />
+              </div>
             </div>
           </div>
         </div>

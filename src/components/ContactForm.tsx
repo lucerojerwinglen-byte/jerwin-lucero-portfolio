@@ -65,7 +65,7 @@ export function ContactForm() {
             id="name"
             aria-invalid={!!errors.name}
             aria-describedby={errors.name ? "name-error" : undefined}
-            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent"
+            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none transition-colors duration-150 ease-[var(--ease-out)] focus:border-accent"
             {...register("name")}
           />
           {errors.name && (
@@ -85,7 +85,7 @@ export function ContactForm() {
             type="email"
             aria-invalid={!!errors.email}
             aria-describedby={errors.email ? "email-error" : undefined}
-            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent"
+            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none transition-colors duration-150 ease-[var(--ease-out)] focus:border-accent"
             {...register("email")}
           />
           {errors.email && (
@@ -105,7 +105,7 @@ export function ContactForm() {
             rows={5}
             aria-invalid={!!errors.message}
             aria-describedby={errors.message ? "message-error" : undefined}
-            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-accent"
+            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none transition-colors duration-150 ease-[var(--ease-out)] focus:border-accent"
             {...register("message")}
           />
           {errors.message && (

@@ -134,7 +134,7 @@ export function TypingGame() {
         onKeyDown={handleMascotKey}
         disabled={finished}
         placeholder="Start typing here..."
-        className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none focus:border-accent disabled:opacity-60"
+        className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none transition-colors duration-150 ease-[var(--ease-out)] focus:border-accent disabled:opacity-60"
         autoComplete="off"
         autoCapitalize="off"
         autoCorrect="off"

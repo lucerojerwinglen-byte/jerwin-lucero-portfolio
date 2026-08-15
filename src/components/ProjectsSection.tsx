@@ -76,7 +76,7 @@ export function ProjectsSection() {
         <button
           type="button"
           onClick={() => setActiveTag(null)}
-          className="mb-6 inline-flex items-center gap-1.5 rounded-full bg-ink px-3 py-1 font-mono text-[11px] text-background"
+          className="mb-6 inline-flex scale-100 items-center gap-1.5 rounded-full bg-ink px-3 py-1 font-mono text-[11px] text-background opacity-100 transition-[opacity,transform] duration-150 ease-[var(--ease-out)] starting:scale-95 starting:opacity-0"
         >
           filtered by {activeTag}
           <X className="h-3 w-3" />

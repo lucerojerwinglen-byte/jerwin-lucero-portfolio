@@ -24,8 +24,15 @@ export function ThemeToggle() {
     return <div className="h-[1.6rem] w-[5.1rem]" aria-hidden />;
   }
 
+  const activeIndex = options.findIndex((o) => o.value === theme);
+
   return (
     <div className="theme-switch">
+      <div
+        aria-hidden="true"
+        className="theme-switch-indicator"
+        style={{ transform: `translateX(${Math.max(activeIndex, 0) * 2}rem)` }}
+      />
       {options.map(({ value, icon: Icon, label }) => (
         <button
           key={value}

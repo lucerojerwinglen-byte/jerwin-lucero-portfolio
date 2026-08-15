@@ -38,11 +38,11 @@ export function Hero() {
               className="[perspective:800px]"
             >
               <div
-                className="relative transition-transform duration-200 ease-out will-change-transform"
+                className="relative transition-transform duration-200 ease-[var(--ease-out)] will-change-transform"
                 style={{ transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}
               >
                 <Image
-                  src="/images/jerwin-hero.jpg"
+                  src="/images/jerwin-hero.png"
                   alt={site.name}
                   width={800}
                   height={1000}
@@ -75,14 +75,14 @@ export function Hero() {
               <a
                 href={site.resumePdfPath}
                 download
-                className="inline-flex items-center gap-2 rounded-full bg-ink px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-80"
+                className="inline-flex items-center gap-2 rounded-full bg-ink px-4 py-2 text-sm font-medium text-background transition-[opacity,transform] duration-150 ease-[var(--ease-out)] hover:opacity-80 active:scale-[0.97]"
               >
                 <Download className="h-4 w-4" />
                 Download resume
               </a>
               <a
                 href="#contact"
-                className="inline-flex items-center gap-2 rounded-full border border-gray-200 px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-gray-50"
+                className="inline-flex items-center gap-2 rounded-full border border-gray-200 px-4 py-2 text-sm font-medium text-ink transition-[color,background-color,transform] duration-150 ease-[var(--ease-out)] hover:bg-gray-50 active:scale-[0.97]"
               >
                 <Mail className="h-4 w-4" />
                 Hire me
