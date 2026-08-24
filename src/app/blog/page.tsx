@@ -12,7 +12,9 @@ export default function BlogIndexPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="reveal font-pixel text-sm text-gray-500">01 — blog</h1>
+      <h1 className="reveal font-mono text-[11px] uppercase tracking-wide text-gray-500">
+        LOG — writing
+      </h1>
       <div className="mt-6">
         {posts.map((post) => (
           <Link

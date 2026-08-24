@@ -12,8 +12,8 @@ import {
   Terminal,
   Award,
   Keyboard,
+  Mail,
   Newspaper,
-  Handshake,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { PresenceIndicator } from "@/components/PresenceIndicator";
@@ -27,14 +27,12 @@ const sectionLinks = [
   { id: "skills", label: "Stack", icon: Terminal, number: "03" },
   { id: "credentials", label: "Certifications", icon: Award, number: "04" },
   { id: "typing-test", label: "Typing test", icon: Keyboard, number: "05" },
+  { id: "contact", label: "Contact", icon: Mail, number: "06" },
 ];
 
-const utilityLinks = [
-  { href: "/blog", label: "Blog", icon: Newspaper },
-  { href: "/#contact", label: "Hire me", icon: Handshake },
-];
+const utilityLinks = [{ href: "/blog", label: "Blog", icon: Newspaper }];
 
-const MENU_EXIT_MS = 180;
+const MENU_EXIT_MS = 200;
 
 export function Nav() {
   const pathname = usePathname();
@@ -85,7 +83,7 @@ export function Nav() {
     <>
       {/* ── Fixed left sidebar (lg+) ── */}
       <nav className="fixed inset-y-0 left-0 z-50 hidden w-56 flex-col border-r border-gray-200 bg-background px-7 py-8 lg:flex">
-        <Link href="/" className="shrink-0 font-pixel text-[15px] leading-none hover:opacity-60">
+        <Link href="/" className="shrink-0 font-display text-[15px] leading-none hover:opacity-60">
           {site.shortName}
         </Link>
 
@@ -106,7 +104,9 @@ export function Nav() {
                     <link.icon className="h-3.5 w-3.5 shrink-0" />
                     <span className="flex-1">{link.label}</span>
                     {isActive && link.number && (
-                      <span className="font-pixel text-[10px] text-gray-400">{link.number}</span>
+                      <span className="font-mono text-[10px] tabular-nums text-gray-400">
+                        REC-{link.number}
+                      </span>
                     )}
                   </a>
                 );
@@ -143,10 +143,15 @@ export function Nav() {
 
       {/* ── Mobile top bar ── */}
       <header className="sticky top-0 z-40 border-b border-gray-200/70 bg-background/90 backdrop-blur-md lg:hidden">
-        <div className="mx-auto flex max-w-2xl items-center justify-between px-6 py-3">
-          <Link href="/" className="font-pixel text-[14px]">
+        <div className="relative mx-auto flex max-w-2xl items-center justify-between px-6 py-3">
+          <Link href="/" className="font-display text-[14px]">
             {site.shortName}
           </Link>
+          {isHome && activeSection && (
+            <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 font-mono text-[11px] uppercase tracking-wide text-gray-400">
+              {sectionLinks.find((link) => link.id === activeSection)?.label}
+            </span>
+          )}
           <button
             type="button"
             className="relative -mr-2.5 flex h-11 w-11 items-center justify-center text-gray-700 hover:text-ink"
@@ -185,7 +190,7 @@ export function Nav() {
             )}
           >
             <div className="flex items-center justify-between border-b border-gray-200 px-6 py-3">
-              <Link href="/" className="font-pixel text-[14px]" onClick={closeMenu}>
+              <Link href="/" className="font-display text-[14px]" onClick={closeMenu}>
                 {site.shortName}
               </Link>
               <button

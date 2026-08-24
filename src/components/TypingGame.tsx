@@ -72,6 +72,7 @@ export function TypingGame() {
   // Playful idle flourish: WASD nudges a little marker around before typing starts.
   function handleMascotKey(e: React.KeyboardEvent) {
     if (startedAt) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const key = e.key.toLowerCase();
     setMascotPos((pos) => {
       const next = { ...pos };
@@ -84,7 +85,7 @@ export function TypingGame() {
   }
 
   return (
-    <Section id="typing-test" number="05" title="typing speed test">
+    <Section id="typing-test" number="05" title="typing speed test" tag="for fun">
       <p className="mb-4 text-sm text-muted">
         Nudge the dot with <kbd className="rounded border border-border px-1">W</kbd>{" "}
         <kbd className="rounded border border-border px-1">A</kbd>{" "}
@@ -164,7 +165,7 @@ export function TypingGame() {
       </div>
 
       {finished && (
-        <p className="mt-3 text-sm text-accent">
+        <p className="mt-3 scale-100 text-sm text-accent opacity-100 transition-[opacity,transform] duration-150 ease-[var(--ease-out)] starting:scale-95 starting:opacity-0">
           Done — {wpm} WPM at {accuracy}% accuracy. Try another one?
         </p>
       )}

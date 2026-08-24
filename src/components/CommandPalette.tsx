@@ -27,7 +27,7 @@ const sections = [
   { id: "projects", label: "Projects", icon: FolderGit2 },
   { id: "experience", label: "Experience", icon: Briefcase },
   { id: "skills", label: "Stack", icon: Terminal },
-  { id: "credentials", label: "Certifications & Seminars", icon: Award },
+  { id: "credentials", label: "Certifications", icon: Award },
   { id: "typing-test", label: "Typing Speed Test", icon: Keyboard },
   { id: "contact", label: "Contact", icon: Mail },
 ];

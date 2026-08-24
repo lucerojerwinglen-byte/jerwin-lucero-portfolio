@@ -71,7 +71,7 @@ export function ProjectsSection() {
   const academic = projects.filter((p) => p.category === "academic" && matches(p));
 
   return (
-    <Section id="projects" number="01" title="projects">
+    <Section id="projects" number="01" title="projects" emphasis="primary">
       {activeTag && (
         <button
           type="button"
@@ -83,43 +83,45 @@ export function ProjectsSection() {
         </button>
       )}
 
-      {engineering.length > 0 && (
-        <div className="mb-8">
-          <h3 className="mb-1 flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wide text-gray-500">
-            <Rocket className="h-3.5 w-3.5" />
-            Shipped &amp; open source
-          </h3>
-          <div>
-            {engineering.map((p) => (
-              <ProjectCard
-                key={p.slug}
-                project={p}
-                activeTag={activeTag}
-                onTagClick={handleTagClick}
-              />
-            ))}
+      <div key={activeTag ?? "all"} className="reveal">
+        {engineering.length > 0 && (
+          <div className="mb-8">
+            <h3 className="mb-1 flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wide text-gray-500">
+              <Rocket className="h-3.5 w-3.5" />
+              Shipped &amp; open source
+            </h3>
+            <div>
+              {engineering.map((p) => (
+                <ProjectCard
+                  key={p.slug}
+                  project={p}
+                  activeTag={activeTag}
+                  onTagClick={handleTagClick}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {academic.length > 0 && (
-        <div>
-          <h3 className="mb-1 flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wide text-gray-500">
-            <FlaskConical className="h-3.5 w-3.5" />
-            Academic &amp; research
-          </h3>
+        {academic.length > 0 && (
           <div>
-            {academic.map((p) => (
-              <ProjectCard
-                key={p.slug}
-                project={p}
-                activeTag={activeTag}
-                onTagClick={handleTagClick}
-              />
-            ))}
+            <h3 className="mb-1 flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wide text-gray-500">
+              <FlaskConical className="h-3.5 w-3.5" />
+              Academic &amp; research
+            </h3>
+            <div>
+              {academic.map((p) => (
+                <ProjectCard
+                  key={p.slug}
+                  project={p}
+                  activeTag={activeTag}
+                  onTagClick={handleTagClick}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </Section>
   );
 }

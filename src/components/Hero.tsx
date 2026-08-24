@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { Download, Mail } from "lucide-react";
+import { CheckCircle2, Download, Mail } from "lucide-react";
 import { GithubIcon } from "@/components/icons/GithubIcon";
 import { site } from "@/content/data/site";
 
@@ -38,7 +38,7 @@ export function Hero() {
               className="[perspective:800px]"
             >
               <div
-                className="relative transition-transform duration-200 ease-[var(--ease-out)] will-change-transform"
+                className="relative transition-transform duration-200 ease-[var(--ease-in-out)] will-change-transform"
                 style={{ transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}
               >
                 <Image
@@ -48,24 +48,27 @@ export function Hero() {
                   height={1000}
                   priority
                   sizes="(min-width: 640px) 208px, 176px"
-                  className="block aspect-[4/5] w-full select-none rounded-2xl object-cover object-top"
+                  className="block aspect-[4/5] w-full select-none rounded-md border border-border object-cover object-top"
                   draggable={false}
                 />
-                <div
-                  aria-hidden="true"
-                  className="halftone-white mask-up pointer-events-none absolute inset-x-0 bottom-0 h-full rounded-2xl"
-                />
+                <span className="absolute -bottom-2.5 left-3 rounded-full border border-border bg-background px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-muted">
+                  Rec. 001
+                </span>
               </div>
             </div>
           </div>
 
           <div>
             <p className="reveal d1 font-mono text-[12px] uppercase tracking-wider text-gray-500">
-              {site.title}
+              {site.title} · Sagility
             </p>
-            <h1 className="reveal d2 mt-2 font-pixel text-3xl leading-none sm:text-[2.4rem]">
+            <h1 className="reveal d2 mt-2 font-display text-3xl font-semibold leading-none sm:text-[2.4rem]">
               {site.name}
             </h1>
+            <p className="reveal d2 mt-2.5 inline-flex items-center gap-1.5 rounded-full border border-verified/30 bg-verified/10 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wide text-verified">
+              <CheckCircle2 className="h-3 w-3" aria-hidden="true" />
+              Status: open to QA · Data · AI roles
+            </p>
 
             <p className="reveal d3 mt-6 max-w-xl text-[15px] leading-relaxed text-gray-600">
               {site.summary}
@@ -73,19 +76,19 @@ export function Hero() {
 
             <div className="reveal d4 mt-7 flex flex-wrap items-center gap-3">
               <a
-                href={site.resumePdfPath}
-                download
-                className="inline-flex items-center gap-2 rounded-full bg-ink px-4 py-2 text-sm font-medium text-background transition-[opacity,transform] duration-150 ease-[var(--ease-out)] hover:opacity-80 active:scale-[0.97]"
-              >
-                <Download className="h-4 w-4" />
-                Download resume
-              </a>
-              <a
                 href="#contact"
-                className="inline-flex items-center gap-2 rounded-full border border-gray-200 px-4 py-2 text-sm font-medium text-ink transition-[color,background-color,transform] duration-150 ease-[var(--ease-out)] hover:bg-gray-50 active:scale-[0.97]"
+                className="inline-flex items-center gap-2 rounded-full bg-ink px-4 py-2 text-sm font-medium text-background transition-[opacity,transform] duration-150 ease-[var(--ease-out)] hover:opacity-80 active:scale-[0.97]"
               >
                 <Mail className="h-4 w-4" />
                 Hire me
+              </a>
+              <a
+                href={site.resumePdfPath}
+                download
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 transition-colors hover:text-ink"
+              >
+                <Download className="h-3.5 w-3.5" />
+                Résumé
               </a>
             </div>
 
@@ -106,8 +109,8 @@ export function Hero() {
                 <Mail className="h-3.5 w-3.5" />
                 email ↗
               </a>
-              <span className="text-gray-300">·</span>
-              <span>
+              <span className="hidden text-gray-300 sm:inline">·</span>
+              <span className="hidden sm:inline">
                 Press <kbd className="rounded border border-gray-200 px-1.5 py-0.5">⌘K</kbd> for
                 the command menu
               </span>

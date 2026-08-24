@@ -5,7 +5,7 @@ import { education } from "@/content/data/education";
 
 export function ExperienceSection() {
   return (
-    <Section id="experience" number="02" title="experience">
+    <Section id="experience" number="02" title="experience" emphasis="primary">
       <div className="mb-10 space-y-7">
         {experience.map((item) => (
           <div key={item.org} className="border-t border-gray-200 pt-5 first:border-t-0 first:pt-0">
