@@ -1,0 +1,359 @@
+/* The résumé document: one design for screen and paper. ADR 0004.
+   Neutrals do the work; one accent, fountain-pen blue, marks links and pen notes.
+   Green (live) and red (form errors) are status only. Every text/background pair is
+   contrast-checked by src/styles/palette.test.ts. Anything here also shapes the PDF:
+   change it, then run `npm run pdf`. */
+
+:root {
+  --canvas: #e6e6e4;
+  --page: #ffffff;
+  --ink: #1b1b1a;
+  --on-ink: #ffffff;
+  --muted: #5e5e5b;
+  --faint: #71716d;
+  --rule: #dcdcd8;
+  --pen: #1f3a8a;
+  --live: #2f7d52;
+  --error: #b42318;
+  --hit: #ffe58a;
+  --pen-soft: rgb(31 58 138 / 0.08);
+  --bar: rgb(246 246 244 / 0.86);
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 10px 30px -12px rgb(0 0 0 / 0.22);
+  --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --head: var(--font-serif), Georgia, serif;
+  --body: var(--font-geist-sans), system-ui, sans-serif;
+  --data: var(--font-geist-mono), ui-monospace, monospace;
+  color-scheme: light;
+  interpolate-size: allow-keywords;
+}
+
+.dark {
+  /* Reading lamp: the same paper under a lamp. Charcoal, not tech-black; no glow. */
+  --canvas: #111112;
+  --page: #1b1b1d;
+  --ink: #e8e7e3;
+  --on-ink: #1b1b1d;
+  --muted: #a7a6a1;
+  --faint: #8e8d89;
+  --rule: #303033;
+  --pen: #a9bdff;
+  --live: #74c99a;
+  --error: #ff8f85;
+  --hit: #6b5a12;
+  --pen-soft: rgb(169 189 255 / 0.1);
+  --bar: rgb(22 22 24 / 0.86);
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.5), 0 14px 34px -14px rgb(0 0 0 / 0.8);
+  color-scheme: dark;
+}
+
+html {
+  background: var(--canvas);
+  color: var(--ink);
+  scroll-padding-top: 64px;
+}
+body {
+  background: var(--canvas);
+  font: 13px/1.5 var(--body);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s;
+}
+::selection { background: var(--pen); color: var(--page); }
+.doc a, .bar a, .toc a, .article a { color: var(--pen); text-decoration: none; }
+.doc a:hover, .article a:hover { text-decoration: underline; text-underline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--pen); outline-offset: 2px; border-radius: 2px; }
+/* Inline by default: Tailwind's reset makes every svg a block, which breaks lines. */
+.ico, .ext { display: inline-block; width: 14px; height: 14px; flex-shrink: 0; stroke-width: 1.7; }
+.glyph { display: inline-block; width: 0.95em; height: 0.95em; vertical-align: -0.12em; margin-right: 3px; fill: currentColor; }
+.skip { position: fixed; left: 16px; top: -60px; z-index: 50; background: var(--ink); color: var(--on-ink); padding: 8px 12px; border-radius: 6px; }
+.skip:focus { top: 12px; }
+
+/* ── Viewer bar ─────────────────────────────── */
+.bar {
+  position: fixed; inset: 0 0 auto; z-index: 20; height: 48px;
+  display: flex; align-items: center; gap: 12px; padding: 0 16px;
+  background: var(--bar); backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid var(--rule);
+  font: 12.5px/1 var(--body); color: var(--muted);
+}
+/* Reading progress: a pen line under the bar, driven by scroll alone (no JS). */
+@supports (animation-timeline: scroll()) {
+  .bar::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px;
+    background: var(--pen); transform-origin: 0 50%;
+    animation: read-progress linear both; animation-timeline: scroll(root);
+  }
+  @keyframes read-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+}
+.file { display: flex; align-items: center; gap: 8px; color: var(--ink); font: 12px var(--data); }
+.pager { margin: 0 auto; font: 12px var(--data); color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pager span { color: var(--muted); }
+.readers { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.readers i { width: 6px; height: 6px; border-radius: 50%; background: var(--live); animation: breathe 2.4s ease-in-out infinite; }
+@keyframes breathe { 50% { opacity: 0.35; } }
+.btn {
+  position: relative; display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px;
+  border-radius: 7px; border: 1px solid transparent; background: none; color: inherit;
+  font: inherit; cursor: pointer; white-space: nowrap;
+  transition: background-color 0.15s, color 0.15s, transform 0.12s var(--ease);
+}
+.btn:hover { background: var(--pen-soft); color: var(--ink); }
+.btn:active { transform: scale(0.96); }
+.btn[aria-pressed="true"] { color: var(--pen); }
+.bar a.btn.primary, .btn.primary { background: var(--ink); color: var(--on-ink); font-weight: 500; }
+.btn.primary:hover { opacity: 0.88; background: var(--ink); color: var(--on-ink); }
+.btn:disabled { opacity: 0.55; pointer-events: none; }
+kbd { font: 10.5px var(--data); border: 1px solid var(--rule); border-radius: 4px; padding: 1px 4px; color: var(--muted); background: var(--page); }
+.sep { width: 1px; height: 18px; background: var(--rule); }
+
+/* Tooltips for icon-only controls */
+[data-tip]:hover::after, [data-tip]:focus-visible::after {
+  content: attr(data-tip); position: absolute; top: calc(100% + 8px); left: 50%; translate: -50% 0;
+  padding: 5px 8px; border-radius: 6px; background: var(--ink); color: var(--on-ink);
+  font: 11px/1.2 var(--body); white-space: nowrap; pointer-events: none; z-index: 40;
+  animation: tip-in 0.15s var(--ease) 0.25s both;
+}
+@keyframes tip-in { from { opacity: 0; translate: -50% -3px; } }
+
+/* Find */
+.find {
+  position: fixed; top: 56px; right: 16px; z-index: 21; display: flex; align-items: center; gap: 8px;
+  padding: 6px 6px 6px 12px; background: var(--page); border: 1px solid var(--rule); border-radius: 10px;
+  box-shadow: var(--shadow); font: 12.5px var(--body); color: var(--muted);
+  animation: pop-in 0.18s var(--ease);
+}
+@keyframes pop-in { from { opacity: 0; transform: translateY(-4px) scale(0.98); } }
+.find input { border: 0; outline: 0; background: none; color: var(--ink); font: inherit; width: 200px; }
+.find output { color: var(--muted); font: 11.5px var(--data); min-width: 54px; text-align: right; font-variant-numeric: tabular-nums; }
+.find .btn { height: 26px; padding: 0 6px; }
+::highlight(find) { background-color: var(--hit); color: var(--ink); }
+::highlight(find-now) { background-color: var(--pen); color: var(--page); }
+
+/* ── Contents (PDF bookmarks), wide screens only. Not ".toc": Tailwind owns that class. ── */
+.toc {
+  position: fixed; top: 72px; left: 24px; width: 188px; z-index: 5;
+  font: 12.5px/1.3 var(--body); color: var(--muted);
+}
+.toc h2 { display: flex; align-items: center; gap: 6px; font: 600 11px var(--body); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; color: var(--muted); }
+.toc ol { list-style: none; padding: 0; margin: 0; }
+.toc > ol > li + li { margin-top: 12px; }
+.toc .pg { font: 10.5px var(--data); color: var(--muted); margin-bottom: 3px; }
+.toc a { display: block; padding: 4px 10px; margin-left: -10px; border-left: 2px solid transparent; color: var(--muted); border-radius: 0 4px 4px 0; transition: color 0.15s, border-color 0.15s, background-color 0.15s; }
+.toc a:hover { color: var(--ink); background: var(--pen-soft); text-decoration: none; }
+.toc a[aria-current="true"] { color: var(--pen); border-left-color: var(--pen); }
+.shortcuts { margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--rule); display: grid; grid-template-columns: auto 1fr; gap: 6px 10px; align-items: center; font-size: 11.5px; }
+.shortcuts kbd { justify-self: start; }
+
+/* ── Pages ──────────────────────────────────── */
+.doc { padding: 80px 16px 120px; display: flex; flex-direction: column; align-items: center; gap: 28px; }
+.sheet {
+  position: relative; display: flex; flex-direction: column; width: 794px; min-height: 1123px;
+  background: var(--page); box-shadow: var(--shadow); padding: 68px 72px 72px;
+  transition: background-color 0.3s; animation: settle 0.7s var(--ease) both;
+}
+.sheet:nth-of-type(2) { animation-delay: 0.08s; }
+.sheet:nth-of-type(3) { animation-delay: 0.16s; }
+@keyframes settle { from { opacity: 0; transform: translateY(10px); } }
+.sheet.web { min-height: 0; padding-bottom: 72px; }
+.runhead, .folio { position: absolute; left: 72px; right: 72px; display: flex; justify-content: space-between; font: 10.5px var(--data); color: var(--faint); letter-spacing: 0.02em; }
+.runhead { top: 30px; }
+.folio { bottom: 34px; }
+
+/* Header */
+.head { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: start; padding-bottom: 16px; border-bottom: 1.5px solid var(--ink); }
+.doc h1 { font: 600 34px/1.05 var(--head); letter-spacing: -0.015em; font-optical-sizing: auto; }
+.role { margin-top: 8px; font: 500 14.5px/1.35 var(--body); }
+.role b { font-weight: 600; }
+.contact { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px 14px; font: 11.5px var(--data); color: var(--muted); }
+.contact > span { display: inline-flex; align-items: center; gap: 5px; }
+.contact .ico, .contact .glyph { width: 12px; height: 12px; color: var(--faint); margin: 0; }
+.copy { display: inline-grid; place-items: center; width: 20px; height: 20px; margin-left: -2px; border: 0; border-radius: 5px; background: none; color: var(--faint); cursor: pointer; transition: background-color 0.15s, color 0.15s; }
+.copy:hover { background: var(--pen-soft); color: var(--pen); }
+.copy .ico { width: 12px; height: 12px; }
+.idbox { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.photo { width: 84px; height: 84px; border-radius: 4px; object-fit: cover; object-position: top; background: #eeeeec; }
+.dark .photo { background: #26262a; }
+.print-only { display: none; }
+.qr-wrap { flex-direction: column; align-items: flex-end; gap: 4px; font: 10.5px var(--data); color: var(--faint); text-align: right; }
+
+/* Sections */
+.doc section { margin-top: 16px; }
+.doc h2 {
+  position: relative; display: flex; align-items: center; gap: 6px;
+  font: 600 11px/1 var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+  padding-bottom: 7px; border-bottom: 1px solid var(--rule); margin-bottom: 8px;
+}
+.anchor { display: inline-grid; place-items: center; width: 18px; height: 18px; margin: -4px 0; border-radius: 4px; color: var(--faint); opacity: 0; transition: opacity 0.15s, color 0.15s, background-color 0.15s; }
+.doc h2:hover .anchor, .anchor:focus-visible { opacity: 1; }
+.anchor:hover { color: var(--pen); background: var(--pen-soft); }
+.anchor .ico { width: 12px; height: 12px; }
+.summary { font: 14.5px/1.55 var(--head); max-width: 72ch; }
+
+.entry { position: relative; padding: 6px 0; border-radius: 2px; transition: opacity 0.25s var(--ease), background-color 0.25s, box-shadow 0.25s; }
+.entry + .entry { border-top: 1px dashed var(--rule); }
+.eh { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.eh h3 { font: 600 14.5px/1.3 var(--head); }
+.eh h3 .org { font: 400 13.5px var(--body); color: var(--muted); }
+.eh h3 a { color: var(--ink); }
+.eh h3 a:hover { color: var(--pen); text-decoration: none; }
+.eh h3 .ext { width: 13px; height: 13px; margin-left: 2px; vertical-align: -1px; color: var(--pen); opacity: 0; transform: translate(-3px, 3px); transition: opacity 0.15s, transform 0.2s var(--ease); }
+.eh h3 a:hover .ext, .eh h3 a:focus-visible .ext { opacity: 1; transform: none; }
+.meta { flex-shrink: 0; display: inline-flex; align-items: center; gap: 5px; font: 11px var(--data); color: var(--muted); white-space: nowrap; }
+.meta .ico, .meta .glyph { width: 11px; height: 11px; margin: 0; }
+.meta .live { display: inline-flex; align-items: center; gap: 5px; color: var(--live); }
+.meta .live::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.desc { margin-top: 3px; max-width: 64ch; }
+.tags { font: 11px var(--data); color: var(--faint); }
+.desc .tags { margin-left: 4px; }
+.tags .tag + .tag::before { content: " · "; }
+sup.fn { position: relative; font: 600 9.5px var(--data); margin-left: 1px; }
+sup.fn a[data-url]:hover::after {
+  content: attr(data-url); position: absolute; left: 50%; bottom: calc(100% + 6px); translate: -50% 0;
+  padding: 4px 7px; border-radius: 5px; background: var(--ink); color: var(--on-ink);
+  font: 400 11px var(--data); white-space: nowrap; pointer-events: none; z-index: 10;
+}
+ul.pts { margin-top: 4px; padding-left: 16px; list-style: disc; }
+ul.pts li { margin: 2px 0; max-width: 66ch; }
+ul.pts li::marker { color: var(--faint); }
+
+details.more { margin-top: 4px; }
+details.more summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font: 11px var(--data); color: var(--pen); border-radius: 4px; }
+details.more summary::-webkit-details-marker { display: none; }
+details.more summary .ico { width: 11px; height: 11px; transition: transform 0.25s var(--ease); }
+details.more[open] summary .ico { transform: rotate(45deg); }
+details.more::details-content { block-size: 0; overflow: clip; transition: block-size 0.3s var(--ease), content-visibility 0.3s allow-discrete; }
+details.more[open]::details-content { block-size: auto; }
+details.more p { margin-top: 6px; padding-left: 12px; border-left: 1px solid var(--pen); color: var(--muted); max-width: 64ch; }
+
+.grid2 { display: grid; grid-template-columns: 7.5rem 1fr; gap: 4px 16px; }
+.grid2 dt { font: 500 12px var(--body); color: var(--muted); padding-top: 1px; }
+.entry.also { margin-top: 10px; padding: 0; border-top: 0; color: var(--muted); }
+
+/* Skills you can click: each one lights up the entries that prove it. */
+.sk { display: inline; padding: 0; margin: 0; border: 0; background: none; font: inherit; color: inherit; text-align: left; }
+.sk[data-ev] { cursor: pointer; text-decoration: underline dotted var(--faint); text-underline-offset: 3px; border-radius: 2px; transition: color 0.15s, background-color 0.15s; }
+.sk[data-ev]:hover { color: var(--pen); text-decoration-color: var(--pen); }
+.sk[aria-pressed="true"] { color: var(--pen); background: var(--pen-soft); box-shadow: 0 0 0 2px var(--pen-soft); text-decoration-style: solid; }
+.doc[data-tracing] .entry:not(.traced) { opacity: 0.38; }
+.entry.traced { background: var(--pen-soft); box-shadow: 0 0 0 8px var(--pen-soft); }
+.trace {
+  position: fixed; left: 50%; bottom: 20px; z-index: 22; translate: -50% 0;
+  display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 14px;
+  background: var(--ink); color: var(--on-ink); border-radius: 99px; box-shadow: var(--shadow);
+  font: 12.5px var(--body); animation: rise 0.25s var(--ease);
+}
+.trace b { font-weight: 600; }
+.trace .btn { height: 26px; padding: 0 8px; color: inherit; }
+.trace .btn:hover { background: rgb(127 127 127 / 0.25); color: inherit; }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+
+/* Footnotes: in the flow, pushed to the sheet's foot, so they can never overlap text. */
+.footnotes { margin-top: auto; padding-top: 7px; border-top: 1px solid var(--rule); width: 40%; min-width: 260px; }
+.sheet > section:last-of-type { margin-bottom: 10px; }
+.footnotes ol { list-style: none; padding: 0; font: 10px/1.6 var(--data); color: var(--muted); }
+.footnotes li { white-space: nowrap; scroll-margin-top: 120px; }
+.footnotes li:target { background: var(--pen-soft); }
+.footnotes li b { color: var(--pen); font-weight: 600; margin-right: 4px; }
+
+/* Margin notes: annotations in the desk gutter, never printed. */
+.note {
+  position: absolute; top: 6px; left: calc(100% + 26px); width: 190px;
+  font: italic 13px/1.4 var(--head); color: var(--pen); transition: opacity 0.25s, translate 0.25s var(--ease);
+}
+.note::before { content: ""; position: absolute; left: -20px; top: 9px; width: 14px; height: 1px; background: var(--pen); opacity: 0.6; }
+[data-notes="off"] .note { opacity: 0; translate: -6px 0; pointer-events: none; }
+
+/* ── Web-only sheet ── */
+.webtag { display: inline-flex; gap: 6px; align-items: center; align-self: flex-start; font: 10.5px var(--data); color: var(--muted); border: 1px dashed var(--rule); border-radius: 99px; padding: 3px 9px; }
+.webtag .ico { width: 11px; height: 11px; }
+.lede { color: var(--muted); max-width: 60ch; margin-bottom: 10px; }
+.posts { list-style: none; padding: 0; }
+.posts li { border-bottom: 1px dashed var(--rule); }
+.posts a { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 7px 0; }
+.posts a:hover { text-decoration: none; }
+.posts a:hover .t { text-decoration: underline; text-underline-offset: 2px; }
+.posts .t { font: 600 14px/1.3 var(--head); color: var(--ink); display: inline-flex; align-items: center; gap: 6px; }
+.posts a:hover .t { color: var(--pen); }
+.posts .ex { display: block; margin-top: 2px; color: var(--muted); font-size: 12.5px; }
+
+form.reply { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; max-width: 560px; }
+form.reply label { display: grid; gap: 4px; font: 500 11.5px var(--body); color: var(--muted); }
+form.reply input, form.reply textarea {
+  font: 13.5px var(--body); color: var(--ink); background: transparent; border: 0; border-bottom: 1px solid var(--rule);
+  padding: 6px 0; outline: 0; border-radius: 0; resize: vertical; transition: border-color 0.15s;
+}
+form.reply input:focus, form.reply textarea:focus { border-bottom-color: var(--pen); }
+form.reply [aria-invalid="true"] { border-bottom-color: var(--error); }
+form.reply .err { color: var(--error); font: 11px var(--body); }
+form.reply .full { grid-column: 1 / -1; }
+form.reply .actions { grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 12px; }
+form.reply .hp { position: absolute; left: -9999px; }
+
+.typing { position: relative; max-width: 560px; border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; font: 14px/1.7 var(--data); color: var(--faint); cursor: text; transition: border-color 0.15s; }
+.typing:focus-within { border-color: var(--pen); }
+.typing .ok { color: var(--ink); }
+.typing .bad { color: var(--error); background: color-mix(in srgb, var(--error) 12%, transparent); border-radius: 2px; }
+.typing .cur { box-shadow: inset 2px 0 0 var(--pen); animation: caret 1s steps(1) infinite; }
+@keyframes caret { 50% { box-shadow: none; } }
+.typing input { position: absolute; inset: 0; opacity: 0; width: 100%; cursor: text; }
+.typing-stats { margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; font: 11.5px var(--data); color: var(--muted); }
+.typing-stats b { color: var(--ink); font-weight: 500; }
+.typing-stats .btn { margin-left: auto; height: 26px; }
+.done { margin-top: 6px; color: var(--pen); font: italic 13.5px var(--head); animation: rise 0.25s var(--ease); }
+.colophon { margin-top: 28px; padding-top: 10px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 11.5px; max-width: 64ch; }
+
+/* ── Blog articles reuse the paper ── */
+.article-wrap { padding: 80px 16px 120px; display: flex; justify-content: center; }
+.sheet.article { min-height: 0; padding: 56px 72px 72px; }
+.article .back { display: inline-flex; align-items: center; gap: 6px; font: 11.5px var(--data); margin-bottom: 28px; }
+.article .date { font: 11px var(--data); color: var(--muted); }
+.article h1 { font: 600 30px/1.15 var(--head); letter-spacing: -0.01em; margin: 6px 0 22px; }
+.article .prose { font-size: 15px; color: var(--ink); --tw-prose-body: var(--ink); --tw-prose-headings: var(--ink); --tw-prose-links: var(--pen); --tw-prose-bold: var(--ink); --tw-prose-bullets: var(--faint); --tw-prose-quotes: var(--muted); --tw-prose-code: var(--ink); --tw-prose-hr: var(--rule); }
+.article .prose :where(h2, h3) { font-family: var(--head); }
+
+/* ── Smaller screens: the paper fills the screen ── */
+@media screen and (max-width: 1279px) {
+  .note, .notes-btn, .toc { display: none; }
+}
+@media screen and (max-width: 840px) {
+  .doc, .article-wrap { padding: 64px 0 100px; gap: 10px; }
+  .sheet, .sheet.article { width: 100%; min-height: 0; padding: 40px 20px 64px; box-shadow: none; }
+  .runhead, .file, .readers, .hide-sm, .sep { display: none; }
+  .folio { left: 20px; right: 20px; bottom: 22px; }
+  .bar { gap: 6px; padding: 0 10px; }
+  .pager { margin: 0 auto 0 0; }
+  .head { grid-template-columns: 1fr 64px; gap: 14px; }
+  .photo { width: 64px; height: 64px; }
+  .doc h1 { font-size: 27px; }
+  .eh { flex-direction: column; gap: 2px; }
+  .grid2 { grid-template-columns: 1fr; gap: 0; }
+  .grid2 dd { margin-bottom: 8px; }
+  .footnotes { width: auto; margin-top: 22px; }
+  .footnotes li { white-space: normal; word-break: break-all; }
+  form.reply { grid-template-columns: 1fr; }
+  .find { left: 10px; right: 10px; }
+  .find input { width: 100%; flex: 1; }
+  .anchor { opacity: 1; }
+}
+
+/* ── Print: exactly the two pages, nothing else ── */
+@page { size: A4; margin: 0; }
+@media print {
+  :root, .dark { --page: #fff; --ink: #111; --muted: #444; --faint: #555; --rule: #ccc; --pen: #1f3a8a; --live: #2f7d52; }
+  html, body { background: #fff; }
+  .bar, .find, .note, .toc, .trace, .skip, .sheet.web, details.more, .copy, .anchor, .ext, [data-sonner-toaster] { display: none !important; }
+  .doc { padding: 0; gap: 0; display: block; }
+  .sheet { width: 210mm; height: 297mm; min-height: 0; box-shadow: none; animation: none; break-after: page; overflow: hidden; }
+  /* Page 2 is the last printed page: no forced break, or anything after it (toasts) makes a blank page 3. */
+  .sheet[data-page="2"] { break-after: auto; }
+  .print-only { display: flex; }
+  .qr { display: block; width: 56px; height: 56px; }
+  .doc a { color: var(--ink); }
+  .sk[data-ev] { text-decoration: none; }
+  .doc[data-tracing] .entry { opacity: 1; background: none; box-shadow: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet, .find, .trace, .done, [data-tip]::after { animation: none; }
+  .readers i, .typing .cur { animation: none; }
+  details.more::details-content { transition: none; }
+}

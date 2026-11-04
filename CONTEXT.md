@@ -3,49 +3,55 @@
 Personal portfolio site for Jerwin Glen A. Lucero (Workday Transactions Analyst at Sagility,
 with a Computer Science background). Next.js (App Router) + TypeScript + Tailwind CSS,
 deployed on Vercel with auto-deploy on push to `main`. Visual direction lives in
-[DESIGN.md](DESIGN.md); animation work plans are in `plans/`.
+[DESIGN.md](DESIGN.md); the résumé decision is ADR 0004. `plans/` holds animation tickets for components that ADR 0004 removed.
 
 ## Language
 
 **Content layer**:
 The typed data files in `src/content/data/` (site, projects, experience, education, skills,
-credentials). The single source for both the website and the resume PDF.
+credentials). The single source for the page and therefore the PDF.
 
-**Resume PDF**:
-Generated at build time from the content layer (`npm run generate:resume`, `@react-pdf/renderer`).
+**Document**:
+The 2-page A4 résumé that is the homepage (`src/components/doc/`, `src/styles/document.css`).
+Everything in it is printed. See ADR 0004.
+
+**Sheet**:
+One A4 page of the document (`.sheet[data-page]`); the web-only sheet is `data-page="A"`.
+
+**Résumé PDF**:
+`public/jerwin-lucero-resume.pdf`, printed from the page by `npm run pdf` (headless Edge) and
+committed. Guarded by `src/lib/document/resume-pdf.test.ts`.
+
+**Resume lock**:
+`src/content/resume-lock.json`: revision number, date and fingerprint of the last generated PDF.
+Source of the "Rev. N" stamp.
+
+**Fingerprint**:
+Hash of every file that shapes the printed page (`src/lib/document/fingerprint.ts`).
+
+**Footnote**:
+Numbered link reference on a linked project; prints as a real URL at the sheet's foot.
+
+**Margin note**:
+Pen-blue aside in the desk gutter on wide screens. Web only; toggled with N.
+
+**Evidence trace**:
+Clicking a skill highlights the entries that prove it (`Skill.usedIn` → `data-entry`).
+
+**Viewer bar**:
+The fixed top bar: file name, page counter, reader count, Find, Notes, reading lamp, Print, PDF.
+
+**Find**:
+Find-in-document (Ctrl K or /), painted with the CSS Custom Highlight API.
+
+**Reading lamp**:
+Dark mode.
 
 **Presence indicator**:
-The live "people viewing" counter, via Supabase Realtime. Degrades gracefully if unconfigured.
+The live "N reading" count in the viewer bar, via Supabase Realtime. Hidden if unconfigured.
 
 **Contact form**:
-Form backed by Resend. Degrades gracefully if its keys are missing.
+The "Reply" form on the web-only sheet, backed by Resend. Degrades gracefully if keys are missing.
 
-**Command palette**:
-The ⌘K / Ctrl+J `cmdk` menu.
-
-**Overview**:
-The homepage's first screen (`Overview.tsx`, section id `about`): headline, CTA, the
-tool marquee (`ToolStrip.tsx`) and the bento tiles linking to the full sections. See ADR 0002.
-
-**Profile rail**:
-The desktop left sidebar (`Nav.tsx`): ID card, colour-dot section links, the reconciliation
-ledger, presence and theme toggle.
-
-**Fit check**:
-The `AUDIT` section under the hero (`FitCheck.tsx`, logic in `src/lib/fit/`). A recruiter
-pastes a job post; each recognised requirement becomes a ledger row stamped Verified /
-Partial / Not yet with evidence links, and the report can prefill the contact form.
-See ADR 0001.
-
-**Capability**:
-One row the fit check can recognise (`capabilities.ts`): the phrases a posting uses, a
-status, an honest note for Partial / Not yet, and evidence looked up from the content layer.
-
-**Typing game**:
-The self-contained typing speed test (`TypingGame.tsx`, snippets in `typing-snippets.ts`).
-
-**Scrollcraft**:
-The scroll-driven animation layer (`public/scrollcraft.js`, mounted by `ScrollcraftMount.tsx`; source/builds in `scrollcraft/`).
-
-**Plans**:
-Self-contained animation improvement tickets in `plans/` (numbered 001…), written for other agents to execute.
+**Typing test**:
+Appendix A on the web-only sheet (`TypingTest.tsx`, snippets in `typing-snippets.ts`).

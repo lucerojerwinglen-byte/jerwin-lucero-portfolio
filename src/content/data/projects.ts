@@ -1,101 +1,106 @@
 import type { Project } from "@/types/content";
 
-// NOTE: once this portfolio site itself has a public repo, add it here too.
+// Order inside each section is the printed order. `note` and `details` are web-only.
 export const projects: Project[] = [
   {
     slug: "lovewin",
     title: "Lovewin",
     description:
-      "Free, end-to-end encrypted digital gifts for long-distance couples — bouquet, letter, photos, voice memo and song, opened from one short link. The AES-GCM key lives after the # in the link, so the server only ever stores ciphertext. Tested on phone and desktop with Vitest and Playwright.",
-    tags: ["SvelteKit", "TypeScript", "Cloudflare", "Playwright"],
+      "Free, end-to-end-encrypted digital gifts for long-distance couples; the server only ever stores ciphertext.",
+    tags: ["SvelteKit", "Cloudflare Workers", "AES-GCM", "Playwright"],
     liveUrl: "https://lovewin.ottie.workers.dev",
-    category: "engineering",
+    details:
+      "Bouquet builder, letters with a sketch pad, photos (EXIF stripped in the browser), voice memos and songs, an optional code lock and unlock time, all checked by the server. Tested on phone and desktop with Vitest and Playwright. Listed on App Builders PH.",
+    note: "The key lives after the # in the link, so even I can’t read your gift.",
+    section: "selected",
     year: 2026,
   },
   {
     slug: "barato",
     title: "Barato",
     description:
-      "Fast-food order optimizer for the Philippines: enter a budget and headcount, and a hand-written two-phase dynamic-programming solver finds the most filling order across six chains. Offline-capable PWA; a weekly GitHub Actions pipeline validates prices before publishing. Runs at $0/month.",
-    tags: ["TypeScript", "React", "Algorithms", "GitHub Actions"],
+      "Finds the most filling fast-food order for a budget across six Philippine chains, with a hand-written dynamic-programming solver.",
+    tags: ["TypeScript", "React", "offline PWA", "GitHub Actions"],
     repoUrl: "https://github.com/lucerojerwinglen-byte/tipid-hacks",
     liveUrl: "https://barato.pages.dev",
-    category: "engineering",
+    details:
+      "A weekly pipeline fetches, checksums, parses and validates prices (30% price-jump and item-count checks) before anything is published; a failed check opens an issue instead of shipping bad data. Runs at $0/month.",
+    note: "Ask me why the combo meal is so often the worst deal.",
+    section: "selected",
     year: 2026,
   },
   {
     slug: "team-ops-suite",
     title: "Team Operations Suite",
     description:
-      "Eight connected web apps for a two-region operations team — case tracking, attendance, performance scoring, quality audits and backlog forecasting — on one login and one database, running in production. Built test-first with 58 recorded architecture decisions. Built for an employer, so no code or screenshots here.",
-    tags: ["React", "Hono", "Cloudflare D1", "Vitest", "Playwright"],
+      "Eight connected apps for a two-region operations team (case tracking, attendance, scoring, quality audits, forecasting) on one login and database, in production; 58 recorded architecture decisions.",
+    tags: ["React", "Hono", "Cloudflare D1", "Playwright"],
     internal: true,
-    category: "engineering",
-    year: 2026,
-  },
-  {
-    slug: "pet-flap",
-    title: "Pet Flap",
-    description:
-      "A one-tap flying game where the character is a photo of your own pet. Runs entirely on-device.",
-    tags: ["TypeScript", "Game Dev"],
-    repoUrl: "https://github.com/lucerojerwinglen-byte/pet-flap",
-    category: "engineering",
+    note: "Built for my own team. No code or screenshots here: it’s my employer’s.",
+    section: "selected",
     year: 2026,
   },
   {
     slug: "cpt-excel-to-dashboard",
     title: "CPT Performance Dashboard",
     description:
-      "Client-side, upload-driven dashboard that turns a raw Excel export into a readable performance view — no backend, no data leaves the browser.",
-    tags: ["TypeScript", "Data Visualization"],
+      "Excel export to team performance view, entirely in the browser; no data leaves the machine.",
+    tags: ["TypeScript", "SheetJS"],
     repoUrl: "https://github.com/lucerojerwinglen-byte/cpt-excel-to-dashboard",
-    category: "engineering",
+    section: "more",
+    year: 2026,
+  },
+  {
+    slug: "pet-flap",
+    title: "Pet Flap",
+    description: "One-tap flying game starring a photo of your own pet, fully on-device.",
+    tags: ["TypeScript"],
+    repoUrl: "https://github.com/lucerojerwinglen-byte/pet-flap",
+    section: "more",
     year: 2026,
   },
   {
     slug: "biasx",
     title: "BiasX",
+    context: "undergraduate thesis",
     description:
-      "Undergraduate thesis: a feature-based framework for explaining and quantifying gender bias in face classification, using Grad-CAM++ and facial landmark detection.",
-    tags: ["Python", "Explainable AI", "Computer Vision"],
-    category: "academic",
+      "A feature-based framework for explaining and quantifying gender bias in face classification, using Grad-CAM++ and facial landmark detection.",
+    tags: ["Python", "explainable AI", "computer vision"],
+    section: "research",
     year: 2024,
   },
   {
     slug: "disaster-preparedness-chatbot",
-    title: "Community-Centric Disaster Preparedness ChatBot AI",
+    title: "Disaster-Preparedness ChatBot",
     description:
-      "An LLM-powered question-answering system delivering localized disaster preparedness information to residents.",
-    tags: ["Python", "LLM", "Prompt Engineering"],
-    category: "academic",
+      "An LLM-powered question-answering system delivering localized disaster-preparedness information to residents.",
+    tags: ["Python", "LLMs", "prompt engineering"],
+    section: "research",
     year: 2024,
   },
   {
     slug: "filipino-cuisine-association-analysis",
-    title: "Association Analysis of Filipino Cuisine Ingredients",
+    title: "Filipino Cuisine Ingredient Analysis",
     description:
-      "Data mining research using ethical web scraping, NLP, and association analysis to identify common ingredients across Filipino dishes.",
-    tags: ["Python", "NLP", "Data Mining"],
-    category: "academic",
+      "Ethical web scraping, NLP and association analysis to find the ingredients Filipino dishes share.",
+    tags: ["Python", "NLP", "data mining"],
+    section: "research",
     year: 2024,
   },
   {
     slug: "inventory-management-system",
     title: "Inventory Management System",
-    description:
-      "A designed, optimized, and normalized library database system built with SQL.",
-    tags: ["SQL", "Database Design"],
-    category: "academic",
+    description: "a normalized SQL library-inventory database",
+    tags: ["SQL"],
+    section: "also",
     year: 2022,
   },
   {
     slug: "revelio",
     title: "Revelio",
-    description:
-      "A C program that hides secret text inside bitmap images using steganography, and later retrieves the hidden message by comparing the original and modified images.",
-    tags: ["C", "Steganography"],
-    category: "academic",
+    description: "Revelio, a C program that hides text inside bitmap images",
+    tags: ["C"],
+    section: "also",
     year: 2021,
   },
 ];

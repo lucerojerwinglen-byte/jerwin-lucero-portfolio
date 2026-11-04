@@ -4,18 +4,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "tsx scripts/generate-resume-pdf.tsx && next build",
-    "generate:resume": "tsx scripts/generate-resume-pdf.tsx",
+    "build": "next build",
+    "pdf": "tsx scripts/generate-resume-pdf.ts",
     "start": "next start",
     "lint": "eslint",
     "test": "tsx --test \"src/**/*.test.ts\""
   },
   "dependencies": {
     "@hookform/resolvers": "^5.8.0",
-    "@react-pdf/renderer": "^4.6.1",
     "@supabase/supabase-js": "^2.112.3",
     "clsx": "^2.1.1",
-    "cmdk": "^1.1.1",
     "gray-matter": "^4.0.3",
     "lucide-react": "^1.31.0",
     "next": "16.3.1",
