@@ -1,22 +1,15 @@
 import type { EducationItem } from "@/types/content";
 
+// Primary and junior high are left off by decision (2026-11-04): two pages, strongest first.
 export const education: EducationItem[] = [
   {
-    level: "Tertiary",
+    credential: "BS Computer Science, Cum Laude",
     school: "Bicol University College of Science",
-    period: "2021 – 2025",
-    detail: "Bachelor of Science in Computer Science (Cum Laude)",
+    period: "2021 — 2025",
   },
   {
-    level: "Secondary",
+    credential: "Senior High School, STEM track, with honors",
     school: "Ligao National High School",
-    period: "2015 – 2021",
-    detail: "Junior High School (with honors) · Senior High School — STEM Academic Track (with honors)",
-  },
-  {
-    level: "Primary",
-    school: "Ligao West Central Elementary School (Binatagan)",
-    period: "2009 – 2015",
-    detail: "Consistent honor student",
+    period: "2021",
   },
 ];

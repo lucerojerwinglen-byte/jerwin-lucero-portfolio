@@ -1,36 +1,35 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Calendar } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { getAllPosts } from "@/lib/blog";
+import { formatRevDate } from "@/lib/document/document";
 
-export const metadata: Metadata = {
-  title: "Blog",
-};
+export const metadata: Metadata = { title: "Writing" };
 
 export default function BlogIndexPage() {
   const posts = getAllPosts();
-
   return (
-    <div className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="reveal font-mono text-[11px] uppercase tracking-wide text-gray-500">
-        LOG — writing
-      </h1>
-      <div className="mt-6">
-        {posts.map((post) => (
-          <Link
-            key={post.slug}
-            href={`/blog/${post.slug}`}
-            className="block border-t border-gray-200 py-5 first:border-t-0 first:pt-0"
-          >
-            <p className="flex items-center gap-1.5 font-mono text-[12px] text-gray-500">
-              <Calendar className="h-3 w-3" />
-              {post.date}
-            </p>
-            <h2 className="mt-1 font-medium text-ink">{post.title}</h2>
-            <p className="mt-2 text-sm leading-relaxed text-gray-600">{post.excerpt}</p>
-          </Link>
-        ))}
-      </div>
-    </div>
+    <main className="article-wrap">
+      <article className="sheet article">
+        <Link className="back" href="/#writing">
+          <ArrowLeft className="ico" aria-hidden="true" />
+          Back to the résumé
+        </Link>
+        <h1>Writing</h1>
+        <ul className="posts">
+          {posts.map((post) => (
+            <li key={post.slug}>
+              <Link href={`/blog/${post.slug}`}>
+                <span>
+                  <span className="t">{post.title}</span>
+                  <span className="ex">{post.excerpt}</span>
+                </span>
+                <span className="meta">{formatRevDate(post.date)}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </article>
+    </main>
   );
 }
