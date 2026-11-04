@@ -4,8 +4,8 @@ import { site } from "@/content/data/site";
 
 export function Footer() {
   return (
-    <footer className="border-t border-gray-200 py-10">
-      <div className="mx-auto flex max-w-2xl flex-col items-center gap-3 px-6 font-mono text-[12px] text-gray-500 sm:flex-row sm:justify-between">
+    <footer className="mt-8 border-t border-gray-200 py-10">
+      <div className="mx-auto flex max-w-[1120px] flex-col items-center gap-3 px-5 font-mono text-[12px] text-gray-500 sm:flex-row sm:justify-between sm:px-8 lg:px-10">
         <p>
           &copy; {new Date().getFullYear()} {site.name}
         </p>

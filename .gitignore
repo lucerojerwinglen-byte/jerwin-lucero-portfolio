@@ -46,3 +46,7 @@ next-env.d.ts
 
 # raw source material (contains phone number/address) — not for the public repo
 /assets-source
+
+# scrollcraft verification screenshots and build workspace
+/lab
+/scrollcraft

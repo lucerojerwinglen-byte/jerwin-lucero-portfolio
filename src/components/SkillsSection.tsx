@@ -13,7 +13,7 @@ const categoryIcons: Record<string, LucideIcon> = {
 export function SkillsSection() {
   return (
     <Section id="skills" number="03" title="stack">
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div className="grid gap-6 sm:grid-cols-2" data-sc-in data-sc-stagger="60">
         {skills.map((group) => {
           const Icon = categoryIcons[group.category] ?? Code2;
           return (
@@ -26,7 +26,7 @@ export function SkillsSection() {
                 {group.items.map((item) => (
                   <span
                     key={item}
-                    className="rounded-full border border-gray-200 px-3 py-1 text-sm text-gray-700"
+                    className="chip-hover rounded-full border border-gray-200 bg-background px-3 py-1 text-sm text-gray-700 hover:border-gray-300"
                   >
                     {item}
                   </span>

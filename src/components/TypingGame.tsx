@@ -93,7 +93,10 @@ export function TypingGame() {
         <kbd className="rounded border border-border px-1">D</kbd> while you wait, then start typing.
       </p>
 
-      <div className="relative mb-5 h-24 overflow-hidden rounded-xl border border-border bg-card">
+      <div
+        className="elevate-1 relative mb-5 h-24 overflow-hidden rounded-xl border border-border bg-card"
+        data-sc-in
+      >
         <div
           className="absolute h-3 w-3 rounded-full bg-accent transition-transform duration-100"
           style={{
@@ -104,7 +107,7 @@ export function TypingGame() {
         />
       </div>
 
-      <p className="mb-4 rounded-xl border border-border bg-card p-4 font-mono text-sm leading-relaxed">
+      <p className="elevate-1 mb-4 rounded-xl border border-border bg-card p-4 font-mono text-sm leading-relaxed">
         {[...target].map((char, i) => {
           const typedChar = typed[i];
           const state =

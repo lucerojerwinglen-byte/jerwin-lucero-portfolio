@@ -1,22 +1,39 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Send, User, Mail, MessageSquare } from "lucide-react";
+import { Send, User, Mail, MessageSquare, CheckCircle2 } from "lucide-react";
 import { Section } from "@/components/Section";
 import { contactFormSchema, type ContactFormValues } from "@/lib/validation";
+import { FIT_REPORT_EVENT } from "@/lib/fit/match";
 import { site } from "@/content/data/site";
 
 export function ContactForm() {
+  const [reportAttached, setReportAttached] = useState(false);
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
   });
+
+  // The fit check hands its report over as a window event, so the two
+  // sections stay independent components on the page.
+  useEffect(() => {
+    function onReport(e: Event) {
+      setValue("message", (e as CustomEvent<string>).detail, { shouldDirty: true });
+      setReportAttached(true);
+      // preventScroll: the fit check is already smooth-scrolling here.
+      document.getElementById("name")?.focus({ preventScroll: true });
+    }
+    window.addEventListener(FIT_REPORT_EVENT, onReport);
+    return () => window.removeEventListener(FIT_REPORT_EVENT, onReport);
+  }, [setValue]);
 
   async function onSubmit(values: ContactFormValues) {
     try {
@@ -29,6 +46,7 @@ export function ContactForm() {
       if (!res.ok) throw new Error(data.error ?? "Something went wrong");
       toast.success("Message sent — thanks for reaching out!");
       reset();
+      setReportAttached(false);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong");
     }
@@ -45,7 +63,19 @@ export function ContactForm() {
         .
       </p>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="max-w-xl space-y-4">
+      {reportAttached && (
+        <p className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-verified/30 bg-verified/10 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wide text-verified">
+          <CheckCircle2 className="h-3 w-3" aria-hidden="true" />
+          Fit report attached: add your name and email
+        </p>
+      )}
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="max-w-xl space-y-4"
+        data-sc-in
+        data-sc-stagger="50"
+      >
         {/* Honeypot field — hidden from real users via CSS, bots often fill it in. */}
         <input
           type="text"
@@ -118,7 +148,7 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-60"
+          className="btn-elevated inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-sm font-medium text-background disabled:pointer-events-none disabled:opacity-60"
         >
           <Send className="h-4 w-4" />
           {isSubmitting ? "Sending..." : "Send message"}

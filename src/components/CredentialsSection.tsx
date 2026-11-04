@@ -5,7 +5,7 @@ import { credentials } from "@/content/data/credentials";
 export function CredentialsSection() {
   return (
     <Section id="credentials" number="04" title="certifications">
-      <ul>
+      <ul data-sc-in data-sc-stagger="50">
         {credentials.map((c) => (
           <li
             key={c.title}

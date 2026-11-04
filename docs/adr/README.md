@@ -5,4 +5,6 @@ per ADR: number, gist, status. Statuses: **active**; **amended by NNNN** (still 
 read both); **RETIRED by NNNN** (the feature it decided is gone); **SUPERSEDED by NNNN**
 (replaced — read the newer one instead). When you add an ADR, add its line here.
 
-_No decisions recorded yet._
+- [0001](0001-fit-check-runs-in-the-browser.md) — Fit check matches job posts with an in-browser keyword matcher, no AI model — **active**
+- [0002](0002-bento-overview-and-highlighter-palette.md) — Bento overview, profile rail, Highlighter (light) / Night Audit (dark) palettes — **amended by 0003**
+- [0003](0003-one-accent-paper-and-graphite.md) — One accent (yellow highlighter) on Paper (light) / Graphite (dark); no tinted tiles — **active**

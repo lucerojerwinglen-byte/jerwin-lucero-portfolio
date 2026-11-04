@@ -18,12 +18,14 @@ import {
   Download,
   SunMoon,
   Copy,
+  ScanSearch,
 } from "lucide-react";
 import { GithubIcon } from "@/components/icons/GithubIcon";
 import { site } from "@/content/data/site";
 
 const sections = [
   { id: "about", label: "About", icon: User },
+  { id: "fit", label: "Check my fit for your role", icon: ScanSearch },
   { id: "projects", label: "Projects", icon: FolderGit2 },
   { id: "experience", label: "Experience", icon: Briefcase },
   { id: "skills", label: "Stack", icon: Terminal },

@@ -4,6 +4,9 @@ export interface Project {
   description: string;
   tags: string[];
   repoUrl?: string;
+  liveUrl?: string;
+  /** Built for an employer: no code or link can be shown. */
+  internal?: boolean;
   category: "engineering" | "academic";
   year: number;
 }

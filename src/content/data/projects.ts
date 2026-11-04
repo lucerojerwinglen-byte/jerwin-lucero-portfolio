@@ -3,22 +3,43 @@ import type { Project } from "@/types/content";
 // NOTE: once this portfolio site itself has a public repo, add it here too.
 export const projects: Project[] = [
   {
+    slug: "lovewin",
+    title: "Lovewin",
+    description:
+      "Free, end-to-end encrypted digital gifts for long-distance couples — bouquet, letter, photos, voice memo and song, opened from one short link. The AES-GCM key lives after the # in the link, so the server only ever stores ciphertext. Tested on phone and desktop with Vitest and Playwright.",
+    tags: ["SvelteKit", "TypeScript", "Cloudflare", "Playwright"],
+    liveUrl: "https://lovewin.ottie.workers.dev",
+    category: "engineering",
+    year: 2026,
+  },
+  {
+    slug: "barato",
+    title: "Barato",
+    description:
+      "Fast-food order optimizer for the Philippines: enter a budget and headcount, and a hand-written two-phase dynamic-programming solver finds the most filling order across six chains. Offline-capable PWA; a weekly GitHub Actions pipeline validates prices before publishing. Runs at $0/month.",
+    tags: ["TypeScript", "React", "Algorithms", "GitHub Actions"],
+    repoUrl: "https://github.com/lucerojerwinglen-byte/tipid-hacks",
+    liveUrl: "https://barato.pages.dev",
+    category: "engineering",
+    year: 2026,
+  },
+  {
+    slug: "team-ops-suite",
+    title: "Team Operations Suite",
+    description:
+      "Eight connected web apps for a two-region operations team — case tracking, attendance, performance scoring, quality audits and backlog forecasting — on one login and one database, running in production. Built test-first with 58 recorded architecture decisions. Built for an employer, so no code or screenshots here.",
+    tags: ["React", "Hono", "Cloudflare D1", "Vitest", "Playwright"],
+    internal: true,
+    category: "engineering",
+    year: 2026,
+  },
+  {
     slug: "pet-flap",
     title: "Pet Flap",
     description:
       "A one-tap flying game where the character is a photo of your own pet. Runs entirely on-device.",
     tags: ["TypeScript", "Game Dev"],
     repoUrl: "https://github.com/lucerojerwinglen-byte/pet-flap",
-    category: "engineering",
-    year: 2026,
-  },
-  {
-    slug: "tipid-hacks",
-    title: "Tipid Hacks",
-    description:
-      "Budget fast-food order optimizer for the Philippines — finds the most filling combo within a set budget.",
-    tags: ["TypeScript"],
-    repoUrl: "https://github.com/lucerojerwinglen-byte/tipid-hacks",
     category: "engineering",
     year: 2026,
   },

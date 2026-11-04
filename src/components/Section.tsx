@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -12,53 +9,40 @@ export function Section({
   children,
   emphasis = "default",
   tag,
+  code,
 }: {
   id: string;
   title: string;
   number: string;
+  /** Replaces the REC-NN label for a record outside the numbered sequence. */
+  code?: string;
   className?: string;
   children: React.ReactNode;
   emphasis?: "default" | "primary";
   tag?: string;
 }) {
-  const ref = useRef<HTMLElement>(null);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -10% 0px" }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <section
-      ref={ref}
       id={id}
-      className={cn("scroll-mt-24 py-10 sm:py-12", className)}
+      data-sc-act="flow"
+      className={cn("scroll-mt-20 px-5 py-3 sm:px-8 lg:px-10", className)}
     >
-      <div className="mx-auto max-w-2xl px-6">
+      <div className="mx-auto max-w-[1120px] rounded-[20px] border border-gray-200 bg-surface px-5 py-7 sm:px-8 sm:py-9">
         <div
+          data-sc-reveal="up"
+          data-sc-reveal-at="0 0.4"
           className={cn(
-            "reveal-scroll flex items-center gap-2 border-b pb-2",
-            emphasis === "primary" ? "border-ink/20" : "border-border",
-            inView && "in-view"
+            "flex items-center gap-2.5 border-b pb-3",
+            emphasis === "primary" ? "border-ink/15" : "border-border"
           )}
         >
-          <span className="font-mono text-[11px] tabular-nums text-muted">REC-{number}</span>
+          <span className="font-mono text-[11px] tabular-nums text-muted">
+            {code ?? `REC-${number}`}
+          </span>
           <h2
             className={cn(
               "font-display uppercase tracking-[0.06em]",
-              emphasis === "primary" ? "text-base font-semibold text-ink" : "text-sm text-gray-500"
+              emphasis === "primary" ? "text-lg font-semibold text-ink" : "text-base text-gray-600"
             )}
           >
             {title}
@@ -72,7 +56,9 @@ export function Section({
             </span>
           )}
         </div>
-        <div className={cn("reveal-scroll d1 mt-6", inView && "in-view")}>{children}</div>
+        <div data-sc-in className="mt-6 max-w-3xl">
+          {children}
+        </div>
       </div>
     </section>
   );

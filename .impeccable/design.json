@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-24T09:00:00Z",
+  "title": "Design System: Jerwin Lucero Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Ledger Paper",
+        "canonical": "#f6f4ee",
+        "tonalRamp": ["#14140f", "#2c2924", "#423d34", "#5c5548", "#7d7460", "#a39a80", "#c7bda3", "#dcd5c2", "#e8e3d5", "#efece3", "#f6f4ee"]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Ledger Ink",
+        "canonical": "#1b1d19",
+        "tonalRamp": ["#0a0b09", "#1b1d19", "#2c2924", "#423d34", "#5c5548", "#7d7460", "#a39a80", "#c7bda3"]
+      },
+      "verified": {
+        "role": "secondary",
+        "displayName": "Verified Green",
+        "canonical": "#1f7a4d",
+        "tonalRamp": ["#0d3320", "#134a2e", "#19613c", "#1f7a4d", "#2f9863", "#4bb47e", "#7ccba0", "#b7e2cb"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display (Geist Pixel)", "purpose": "Hero name only." },
+      "headline": { "displayName": "Headline (Geist Pixel)", "purpose": "Blog post titles." },
+      "title": { "displayName": "Title (Geist Pixel)", "purpose": "Section record headers (REC-NN)." },
+      "body": { "displayName": "Body (Geist)", "purpose": "Paragraph copy, max-w-xl measure." },
+      "label": { "displayName": "Label (Geist Mono)", "purpose": "Record IDs, dates, status badges, nav numbers." }
+    },
+    "shadows": [
+      { "name": "overlay-2xl", "value": "0 25px 50px -12px rgba(0, 0, 0, 0.25)", "purpose": "Command palette dialog only — the sole surface allowed elevation, per the Flat-By-Default Rule." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.23, 1, 0.32, 1)", "purpose": "Default for entering/exiting UI (buttons, menus, dialogs)." },
+      { "name": "ease-in-out", "value": "cubic-bezier(0.77, 0, 0.175, 1)", "purpose": "On-screen movement (hero portrait cursor-tilt)." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single filled CTA per view (e.g. \"Hire me\").",
+      "html": "<button class=\"ds-btn-primary\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m22 2-7 20-4-9-9-4Z\"/><path d=\"M22 2 11 13\"/></svg>Hire me</button>",
+      "css": ".ds-btn-primary { display:inline-flex; align-items:center; gap:8px; background:#1b1d19; color:#f6f4ee; padding:8px 16px; border-radius:9999px; border:none; font-family:Geist,ui-sans-serif,system-ui,sans-serif; font-size:14px; font-weight:500; cursor:pointer; transition:opacity 150ms cubic-bezier(0.23,1,0.32,1), transform 150ms cubic-bezier(0.23,1,0.32,1); } .ds-btn-primary:hover { opacity:0.8; } .ds-btn-primary:focus-visible { outline:2px solid #1b1d19; outline-offset:2px; } .ds-btn-primary:active { transform:scale(0.97); }"
+    },
+    {
+      "name": "Secondary Link",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Every non-primary action — plain text link with a leading icon.",
+      "html": "<a href=\"#\" class=\"ds-btn-secondary\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 15V3m0 12-4-4m4 4 4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17\"/></svg>Résumé</a>",
+      "css": ".ds-btn-secondary { display:inline-flex; align-items:center; gap:6px; color:#5c5548; font-family:Geist,ui-sans-serif,system-ui,sans-serif; font-size:14px; font-weight:500; text-decoration:none; transition:color 150ms; } .ds-btn-secondary:hover { color:#1b1d19; } .ds-btn-secondary:focus-visible { outline:2px solid #1b1d19; outline-offset:2px; border-radius:2px; }"
+    },
+    {
+      "name": "Verified Badge",
+      "kind": "chip",
+      "refersTo": "badge-verified",
+      "description": "Status/verification signal — the hero's open-to-work badge.",
+      "html": "<span class=\"ds-badge-verified\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21.801 10A10 10 0 1 1 17 3.335\"/><path d=\"m9 11 3 3L22 4\"/></svg>Status: open to QA · Data · AI roles</span>",
+      "css": ".ds-badge-verified { display:inline-flex; align-items:center; gap:6px; border:1px solid rgba(31,122,77,0.3); background:rgba(31,122,77,0.1); color:#1f7a4d; padding:4px 10px; border-radius:9999px; font-family:'Geist Mono',ui-monospace,monospace; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.04em; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-text",
+      "description": "Contact form / typing-test text field.",
+      "html": "<input class=\"ds-input\" placeholder=\"Your name\" />",
+      "css": ".ds-input { width:100%; border-radius:12px; border:1px solid #dcd5c2; background:#f6f4ee; padding:8px 12px; font-family:Geist,ui-sans-serif,system-ui,sans-serif; font-size:14px; color:#1b1d19; outline:none; transition:border-color 150ms cubic-bezier(0.23,1,0.32,1); } .ds-input::placeholder { color:#7d7460; } .ds-input:focus { border-color:#1b1d19; } .ds-input:disabled { opacity:0.6; }"
+    },
+    {
+      "name": "Nav Item",
+      "kind": "nav",
+      "refersTo": "nav-item",
+      "description": "Sidebar section link with active-state record ID tag.",
+      "html": "<a href=\"#\" class=\"ds-nav-item ds-nav-item--active\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 4h16v4H4zM4 12h16v4H4zM4 20h16\"/></svg><span style=\"flex:1\">Projects</span><span class=\"ds-nav-item__tag\">REC-01</span></a>",
+      "css": ".ds-nav-item { display:flex; align-items:center; gap:8px; margin:0 -8px; padding:6px 8px; border-radius:8px; color:#7d7460; font-family:'Geist Mono',ui-monospace,monospace; font-size:13px; text-decoration:none; transition:background-color 150ms, color 150ms; } .ds-nav-item:hover { background:#efece3; color:#1b1d19; } .ds-nav-item--active { color:#1b1d19; } .ds-nav-item__tag { font-size:10px; letter-spacing:0.04em; color:#a39a80; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Data Validation Ledger",
+    "overview": "This portfolio stages a career pivot as an audited, reconciled ledger rather than a generic developer-portfolio terminal. The subject is a Workday HR-transactions analyst (Cum Laude CS grad) moving into QA, Data Analysis, and AI — a pivot that is fundamentally about reconciliation and verification, so the interface borrows the visual grammar of that world: record IDs, verified/reconciled status marks, ruled ledger paper, and tabular data — rather than the halftone-dot, pixel-terminal aesthetic of a generic \"indie dev\" template it replaced. The system stays flat, quiet, and confident: one warm paper ground, near-black ink for text, and a single verification-green accent used sparingly and only where it means something (a completed record, an open-to-work status). Density is low and reading-first — this is a single scrolling document a recruiter skims in under a minute, not a dashboard. Two confirmed rejections carry forward from the redesign: no halftone/dot decoration, and no ruled-line background texture (tried once, explicitly rejected — the paper color and verified accent stay, decorative texture does not).",
+    "keyCharacteristics": [
+      "Flat surfaces, ledger-paper warmth, one verification-green accent used as real signal, not decoration",
+      "Every recurring numbered/entry label reads as a record ID (REC-01), not a decorative index",
+      "Pixel-font display headers (Geist Pixel) paired with a clean sans body and a monospace data voice",
+      "One primary action per view; no competing CTAs"
+    ],
+    "rules": [
+      { "name": "The Reserved Signal Rule", "body": "Verified Green appears only on confirmed, evidence-backed states (a completed record, an \"open to work\" status). It never decorates a hover state, an icon, or a heading for emphasis alone — if it appears, something specific is being verified.", "section": "colors" },
+      { "name": "The Mono-Is-Data Rule", "body": "Monospace is reserved for genuinely tabular or identifier content — record IDs, dates, WPM stats, keyboard shortcuts. It is never used as a \"technical-looking\" costume on prose.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Shadows are reserved for content that must visually separate from the whole page (the command palette). A card, input, or badge never gets a shadow — a border and a background step do the job.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do reserve Verified Green for genuine verification/status signal (badges, checkmarks on evidence sections)",
+      "Do use monospace exclusively for record IDs, dates, and tabular data",
+      "Do keep exactly one primary (filled, pill) button per view; every other action is a plain text link",
+      "Do use 1px hairline borders and background-color steps for surface separation instead of shadows"
+    ],
+    "donts": [
+      "Don't reintroduce halftone/dot decoration or the ruled-line background texture — both were tried and explicitly rejected",
+      "Don't add shadows to cards, inputs, or badges; the command palette is the only surface allowed one",
+      "Don't let a section's record-ID number (\"01\", \"02\"...) carry meaning outside the homepage's own section sequence",
+      "Don't stack more than one filled/primary-weight CTA in the same view"
+    ]
+  }
+}

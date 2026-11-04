@@ -47,6 +47,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <div className="sc-grain" aria-hidden="true" />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <a
             href="#main-content"
@@ -55,7 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             Skip to content
           </a>
           <Nav />
-          <div className="relative z-10 flex flex-1 flex-col lg:pl-56">
+          <div className="relative z-10 flex flex-1 flex-col lg:pl-[272px]">
             <main id="main-content" className="flex-1">
               {children}
             </main>

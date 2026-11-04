@@ -12,4 +12,4 @@ the task needs. Working agreement: `docs/agents/senior-loop.md`. Domain-doc rule
 - `npm run dev` — dev server
 - `npm run build` — generates resume PDF, then `next build`
 - `npm run lint` — ESLint
-- No test runner yet.
+- `npm test` — unit tests (`node:test` via `tsx --test`, files `src/**/*.test.ts`; no extra dependency)

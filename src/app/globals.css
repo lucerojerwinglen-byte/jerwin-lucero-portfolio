@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../styles/scrollcraft.css" layer(base);
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -14,23 +15,38 @@
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 
-  /* Ledger paper */
-  --bg: #f6f4ee;
-  --ink: #1b1d19;
-  --g50: #efece3;
-  --g100: #e8e3d5;
-  --g200: #dcd5c2;
-  --g300: #c7bda3;
-  --g400: #a39a80;
-  --g500: #7d7460;
-  --g600: #5c5548;
-  --g700: #423d34;
-  --g800: #2c2924;
-  --g900: #1f1d19;
-  --g950: #14140f;
-  --verified: #1f7a4d;
-  --sel-bg: #1b1d19;
-  --sel-fg: #f6f4ee;
+  /* Paper: warm neutrals and ink do the work. One accent, the yellow
+     highlighter, marks only what deserves marking. Green / amber / grey are
+     status signals (verified / partial / not yet), never decoration.
+     Every text/background pair is contrast-checked by src/styles/palette.test.ts. */
+  --bg: #f7f5f0;
+  --ink: #1a1917;
+  --g50: #f0ede6;
+  --g100: #e8e4db;
+  --g200: #dfdad0;
+  --g300: #c9c2b5;
+  --g400: #a19a8c;
+  --g500: #6b665c;
+  --g600: #4f4b43;
+  --g700: #3b3833;
+  --g800: #2a2825;
+  --g900: #201f1c;
+  --g950: #1a1917;
+  --verified: #17734a;
+  --sel-bg: #ffd84d;
+  --sel-fg: #1a1917;
+
+  --rail: #f2efe8;
+  --surface: #fffefb;
+  --mark: #ffd84d;
+  --mark-ink: #1a1917;
+  --ok-soft: #e3f2e8;
+  --partial: #8a5a00;
+  --partial-soft: #fbefd5;
+  --cta: #1a1917;
+  --cta-ink: #f7f5f0;
+  /* Depth is a real shadow (offset + blur), never a coloured halo. */
+  --lift: 0 1px 2px rgb(26 25 23 / 0.04), 0 10px 24px -14px rgb(26 25 23 / 0.14);
 
   /* Back-compat aliases used by a few older components */
   --background: var(--bg);
@@ -42,23 +58,36 @@
 }
 
 .dark {
-  /* Night audit */
-  --bg: #14140f;
-  --ink: #ede9dd;
-  --g50: #1c1c15;
-  --g100: #24231b;
-  --g200: #322f24;
-  --g300: #453f30;
-  --g400: #a39a80;
-  --g500: #b3ac97;
-  --g600: #c5c0ac;
-  --g700: #d5d1c1;
-  --g800: #e5e2d6;
-  --g900: #ede9dd;
-  --g950: #f6f4ee;
-  --verified: #34c176;
-  --sel-bg: #ede9dd;
-  --sel-fg: #14140f;
+  /* Graphite: the same paper read by lamplight. Warm charcoal, not a
+     tech-black; no glow. The highlighter becomes yellow ink, because light
+     text on a yellow band is unreadable. */
+  --bg: #151412;
+  --ink: #ebe7df;
+  --g50: #201f1c;
+  --g100: #272522;
+  --g200: #312f2b;
+  --g300: #423f39;
+  --g400: #6f6a61;
+  --g500: #a29c91;
+  --g600: #c0bab0;
+  --g700: #d3cec5;
+  --g800: #e2ded6;
+  --g900: #ebe7df;
+  --g950: #f5f3ee;
+  --verified: #6cc795;
+  --sel-bg: #f2cd4f;
+  --sel-fg: #151412;
+
+  --rail: #181715;
+  --surface: #1d1c19;
+  --mark: #f2cd4f;
+  --mark-ink: #151412;
+  --ok-soft: #1f2f25;
+  --partial: #e3b45c;
+  --partial-soft: #302818;
+  --cta: #ebe7df;
+  --cta-ink: #151412;
+  --lift: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 28px -16px rgb(0 0 0 / 0.6);
 
   --background: var(--bg);
   --foreground: var(--ink);
@@ -67,6 +96,101 @@
   --card: var(--g50);
   --accent: var(--ink);
   color-scheme: dark;
+}
+
+/* scrollcraft token bridge — maps the six brand roles onto the existing
+   ledger palette. --bg/--ink/etc already flip under .dark, so these need no
+   separate dark-mode block. */
+:root {
+  --sc-canvas: var(--bg);
+  --sc-surface: var(--g50);
+  --sc-ink: var(--ink);
+  --sc-ink-soft: var(--g500);
+  --sc-accent: var(--verified);
+  --sc-accent-ink: var(--bg);
+
+  --sc-hairline: var(--g200);
+  --sc-hairline-strong: var(--g300);
+
+  --sc-font-display: "Geist Pixel", var(--font-geist-mono), monospace;
+  --sc-font-text: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --sc-font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* Tint shadows to the paper's own warm hue instead of scrollcraft.css's
+     default cool near-black — a pure-black or blue-black shadow on this
+     ledger palette reads as dirt, not depth. */
+  --sc-shadow-color: 70 10% 6%;
+}
+
+/* ── Elevation — three steps, held to that ceiling everywhere on the page.
+   Shadow + a 1px top edge-light together, never shadow alone: the edge is
+   what sells a raised surface as physically lit rather than just blurred. */
+.elevate-1 {
+  box-shadow: var(--sc-e1), var(--sc-edge);
+}
+.elevate-2 {
+  box-shadow: var(--sc-e2), var(--sc-edge);
+}
+.elevate-3 {
+  box-shadow: var(--sc-e3), var(--sc-edge);
+}
+/* A pressable surface: rests at e1, lifts to e2 on hover, settles back down
+   (with the existing active:scale press) on click. */
+.btn-elevated {
+  box-shadow: var(--sc-e1), var(--sc-edge);
+  transition:
+    transform 240ms var(--ease-out),
+    box-shadow 240ms var(--ease-out);
+}
+.btn-elevated:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--sc-e2), var(--sc-edge);
+}
+.btn-elevated:active {
+  transform: translateY(0);
+  box-shadow: var(--sc-e1), var(--sc-edge);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-elevated:hover {
+    transform: none;
+  }
+}
+
+/* Small bordered pills (skill tags, filter chips): rest flat, lift a hair on
+   hover so the ledger's "instrument" surfaces feel tactile, not printed. */
+.chip-hover {
+  transition:
+    transform 220ms var(--ease-out),
+    box-shadow 220ms var(--ease-out),
+    border-color 220ms var(--ease-out);
+}
+
+/* Slow the engine's own flow-in reveal and kinetic/reveal-wipe pacing a
+   notch past its scrollcraft.css default — unlayered here so it wins over
+   the base-layer engine rule without editing the engine file itself. */
+[data-sc-in],
+[data-sc-stagger] > * {
+  transition:
+    opacity 900ms var(--sc-ease-out),
+    transform 900ms var(--sc-ease-out);
+}
+.chip-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--sc-e1), var(--sc-edge);
+}
+@media (prefers-reduced-motion: reduce) {
+  .chip-hover:hover {
+    transform: none;
+  }
+}
+
+/* A paper grain, not a ruled line: fine noise, not structure. Reinforces the
+   ledger-paper material instead of leaving it a flat styled rectangle. */
+.sc-grain {
+  opacity: 0.028;
+}
+.dark .sc-grain {
+  opacity: 0.05;
 }
 
 @theme inline {
@@ -79,6 +203,15 @@
   --color-accent: var(--ink);
   --color-brand: var(--ink);
   --color-verified: var(--verified);
+  --color-ok-soft: var(--ok-soft);
+  --color-partial: var(--partial);
+  --color-partial-soft: var(--partial-soft);
+  --color-rail: var(--rail);
+  --color-surface: var(--surface);
+  --color-mark: var(--mark);
+  --color-mark-ink: var(--mark-ink);
+  --color-cta: var(--cta);
+  --color-cta-ink: var(--cta-ink);
 
   --color-gray-50: var(--g50);
   --color-gray-100: var(--g100);
@@ -151,22 +284,22 @@ html.theme-anim *::after {
 }
 .reveal {
   opacity: 0;
-  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 .d1 {
-  animation-delay: 0.04s;
+  animation-delay: 0.08s;
 }
 .d2 {
-  animation-delay: 0.09s;
+  animation-delay: 0.17s;
 }
 .d3 {
-  animation-delay: 0.14s;
+  animation-delay: 0.26s;
 }
 .d4 {
-  animation-delay: 0.19s;
+  animation-delay: 0.35s;
 }
 .d5 {
-  animation-delay: 0.24s;
+  animation-delay: 0.44s;
 }
 
 @keyframes blink {
@@ -199,7 +332,7 @@ html.theme-anim *::after {
   transform: translateY(12px);
 }
 .reveal-scroll.in-view {
-  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -207,6 +340,117 @@ html.theme-anim *::after {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+}
+
+/* ── fit check: ledger rows print in, then their stamps land ───── */
+/* Longhands on purpose: the minifier can drop a nameless shorthand. */
+@keyframes fitRowIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fitStamp {
+  from {
+    opacity: 0;
+    transform: scale(1.3) rotate(-8deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fitBarGrow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+/* Stagger is capped at 12 rows so a long posting still settles in ~1s. */
+.fit-row {
+  animation-name: fitRowIn;
+  animation-duration: 320ms;
+  animation-timing-function: var(--ease-out);
+  animation-fill-mode: both;
+  animation-delay: calc(min(var(--i, 0), 12) * 55ms);
+}
+.fit-stamp {
+  animation-name: fitStamp;
+  animation-duration: 240ms;
+  animation-timing-function: var(--ease-out);
+  animation-fill-mode: both;
+  animation-delay: calc(min(var(--i, 0), 12) * 55ms + 200ms);
+}
+.fit-bar-seg {
+  transform-origin: left;
+  animation-name: fitBarGrow;
+  animation-duration: 700ms;
+  animation-timing-function: var(--ease-out);
+  animation-fill-mode: both;
+  animation-delay: calc(var(--i, 0) * 250ms + 150ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fit-row,
+  .fit-stamp,
+  .fit-bar-seg {
+    animation: none;
+  }
+}
+
+/* ── overview bento ───────────────────────────── */
+/* The one accent: a highlighter stroke behind a word, not a background box.
+   In dark mode it becomes yellow ink instead. */
+.hl-mark {
+  background: linear-gradient(transparent 60%, var(--mark) 60%, var(--mark) 90%, transparent 90%);
+  padding: 0 0.06em;
+}
+.dark .hl-mark {
+  background: none;
+  color: var(--mark);
+  padding: 0;
+}
+.lift {
+  box-shadow: var(--lift);
+}
+/* Tiles rest flat; hover only firms up the edge and adds a real shadow. */
+.tile {
+  transition:
+    border-color 240ms var(--ease-out),
+    box-shadow 240ms var(--ease-out);
+}
+.tile:hover {
+  border-color: var(--g300);
+  box-shadow: var(--lift);
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+/* Longhands on purpose (see the fit-check note above). */
+.marquee-track {
+  animation-name: marquee;
+  animation-duration: 60s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+.marquee {
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
   }
 }
 
@@ -228,7 +472,7 @@ html.theme-anim *::after {
   height: 2rem;
   border-radius: 9999px;
   background: var(--g100);
-  transition: transform 200ms var(--ease-out);
+  transition: transform 280ms var(--ease-out);
 }
 .theme-opt {
   position: relative;
@@ -240,7 +484,7 @@ html.theme-anim *::after {
   border-radius: 9999px;
   color: var(--g400);
   cursor: pointer;
-  transition: color 0.2s;
+  transition: color 0.28s;
 }
 .theme-opt:hover {
   color: var(--ink);
@@ -258,11 +502,11 @@ html.theme-anim *::after {
 a,
 button {
   transition:
-    color 0.2s,
-    background-color 0.2s,
-    border-color 0.2s,
-    opacity 0.2s,
-    transform 150ms var(--ease-out);
+    color 0.28s,
+    background-color 0.28s,
+    border-color 0.28s,
+    opacity 0.28s,
+    transform 180ms var(--ease-out);
 }
 
 button:not(:disabled):active {
