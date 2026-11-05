@@ -94,6 +94,29 @@ A **generic** logo is a lucide icon for things that aren't brands (SQL, NLP, AES
 The three fanned cards in 02 projects (`featured` in `home.ts`): Lovewin, CPT Tools and a
 "Next app" placeholder.
 
+**Portrait / cap toggle**:
+The hero drawing (`Portrait.tsx`). Two face-aligned drawings (`jerwin-nocap.webp`,
+`jerwin-cap.webp`, made by `scripts/hero-cap-images.mjs` from the originals in the git-ignored
+`assets-source/`); the cap one wipes in, the plain one wipes out along the same line, so the
+hair never shows around the cap.
+
+**Stack explorer / "used in"**:
+The homepage stack (`StackExplorer.tsx`): filter buttons plus tags that open a "used in" card
+linking to the projects or jobs listed in a skill's `usedIn` (`src/lib/home/used-in.ts`).
+
+**Tools I use** (`toolsIUse` in `home.ts`):
+The daily tools (Claude Code, VS Code, Obsidian…) in the scrolling strip and on /experience.
+Homepage-only: not in `skills.ts`, so the résumé and PDF don't change.
+
+**Anthropic certificates** (`anthropicCerts` in `home.ts`):
+Four Anthropic Education certificates (Skilljar), shown on the homepage and under "AI learning"
+on /certifications, each with a verify link and a PDF copy in `public/certificates/`. Website
+only: not in `credentials.ts`, so the résumé and PDF don't change.
+
+**Hover system**:
+`src/styles/hover.css`, the playful cursor effects on every component (DESIGN.md, Hover). Mouse
+only, off for touch and reduced motion.
+
 **CPT Tools**:
 The 8-app internal suite (formerly "Team Operations Suite"). Named, but never shown with the
 employer's logo, links or screenshots.
