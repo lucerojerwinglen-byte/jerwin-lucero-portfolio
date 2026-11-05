@@ -66,15 +66,22 @@ driven by scroll alone, and tooltips appear after 250ms. Everything is off under
 - **Layout:** fixed 224px sidebar (pages, section jumps, Alt+K / Alt+J hints, viewer count,
   system/light/dark switch, email) and one centered 624px column. At ≤900px the sidebar
   becomes a top bar with a menu.
-- **Colour:** neutrals only, no accent: white page, near-black ink, greys. Live green and
-  error red stay status-only. Tokens override the résumé's names on `html:has(.home)` so
+- **Colour:** the page is neutrals only: white page, near-black ink, greys. Live green and
+  error red stay status-only. **Logos keep their brand colours** (ADR 0006): tech, AI tools,
+  project icons and certification issuers, always logo + name (wordmarks stand alone);
+  black marks (GitHub, OpenAI, Vercel) turn white in dark mode; wordmarks (Workday) sit on a
+  small light plate in dark mode. Tokens override the résumé's names on `html:has(.home)` so
   reused components (typing test) follow; checked by `palette.test.ts`.
 - **Type:** Geist Pixel Square (from the `geist` package) for the name, card titles and
   "say hello"; Geist body; Geist Mono for data, labels and section numbers.
 - **Decoration:** halftone only. A faded dot grid in corners and between blocks, and the
   portrait in greyscale with a 3px dot screen.
 - **Sections:** `NN — title` headers over a dashed rule, renumbered when one is hidden.
-  Projects are a fanned stack of three cards; GitHub contributions are drawn as dots sized
+  Projects are a fanned stack of three cards (Lovewin, CPT Tools, a "Next app" placeholder); GitHub contributions are drawn as dots sized
   0–4 by activity.
 - **Motion:** card fan 0.5s ease-out quint; overlays fade/rise in about 0.2s; all off under
   `prefers-reduced-motion`.
+- **Logos:** `src/lib/logos.ts` maps every shown name to an Iconify logo, a file in
+  `public/logos/` (sources in `SOURCES.md`) or a generic lucide icon; checked by `logos.test.ts`.
+- **Portfolio pages:** `/projects`, `/experience`, `/certifications` share the homepage shell.
+  Only links that say "résumé" or "pdf" lead to `/resume` (checked by `links.test.ts`).

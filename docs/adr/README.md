@@ -9,4 +9,5 @@ read both); **RETIRED by NNNN** (the feature it decided is gone); **SUPERSEDED b
 - [0002](0002-bento-overview-and-highlighter-palette.md) — Bento overview, profile rail, Highlighter (light) / Night Audit (dark) palettes — **SUPERSEDED by 0004**
 - [0003](0003-one-accent-paper-and-graphite.md) — One accent (yellow highlighter) on Paper (light) / Graphite (dark); no tinted tiles — **SUPERSEDED by 0004**
 - [0004](0004-the-site-is-the-resume.md) — The site is the résumé: one A4 document for screen and print, PDF generated from the page and test-guarded — **amended by 0005** (homepage moves to /resume; PDF pipeline still holds)
-- [0005](0005-portfolio-homepage-resume-moves-to-its-own-page.md) — Homepage follows a sidebar + numbered-sections portfolio layout, neutrals only; résumé and PDF move to /resume; placeholders never fabricate — **active**
+- [0005](0005-portfolio-homepage-resume-moves-to-its-own-page.md) — Homepage follows a sidebar + numbered-sections portfolio layout, neutrals only; résumé and PDF move to /resume; placeholders never fabricate — **amended by 0006**
+- [0006](0006-software-engineer-hero-brand-logos-portfolio-pages.md) — Homepage says software engineer (Workday as caption); logos keep brand colours everywhere; CPT Tools named; "see more" stays on new portfolio pages — **active** (amends 0005)

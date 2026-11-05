@@ -9,13 +9,16 @@ import type { SearchItem } from "./search";
 export function searchItems(home: "" | "/" = ""): SearchItem[] {
   return [
     ...numberSections(sections).map((s) => ({ title: sectionLabel(s), kind: "section" as const, href: `${home}#${s.id}` })),
-    { title: "Résumé", kind: "page", href: "/resume", keywords: "cv experience skills education" },
+    { title: "All projects", kind: "page", href: "/projects", keywords: "apps work research portfolio" },
+    { title: "Experience", kind: "page", href: "/experience", keywords: "work jobs stack skills education history" },
+    { title: "Certifications", kind: "page", href: "/certifications", keywords: "credentials seminars workshops civil service" },
+    { title: "Résumé", kind: "page", href: "/resume", keywords: "cv" },
     { title: "Résumé PDF", kind: "file", href: site.resumePdfPath, keywords: "download cv print" },
     { title: "Contact", kind: "section", href: `${home}#hello`, keywords: "email hire message say hello" },
     ...projects.map((p) => ({
       title: p.title,
       kind: "project" as const,
-      href: p.section === "selected" ? `${home}#projects` : "/resume#work",
+      href: `/projects#${p.slug}`,
       keywords: `${p.description} ${p.tags.join(" ")}`,
     })),
     ...getAllPosts().map((p) => ({ title: p.title, kind: "post" as const, href: `/blog/${p.slug}`, keywords: p.tags.join(" ") })),
