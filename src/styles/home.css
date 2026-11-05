@@ -126,27 +126,49 @@ html:has(.home) body {
 .col { position: relative; z-index: 1; width: min(var(--col), 100% - 48px); margin: 0 auto; padding: 88px 0 64px; }
 
 .hero { display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: start; }
+/* The hero drawing, in its own colours (a drawing, not a photo: no halftone). The cap drawing sits
+   on top, face-aligned, behind a soft-edged mask: sliding the mask down reveals it from the top,
+   like pulling a cap on; sliding it back up lifts it off. */
 .portrait {
   position: relative;
-  width: 220px; aspect-ratio: 220 / 210; overflow: hidden;
-  background: var(--chip);
+  width: 220px; aspect-ratio: 220 / 210; cursor: pointer;
 }
-.portrait img {
-  width: 100%; height: 100%; object-fit: cover; object-position: top;
-  filter: grayscale(1) contrast(1.25) brightness(1.02);
+/* No frame: the drawings have no background (cut out by scripts/hero-cap-images.mjs), and the
+   sweater, cut off at the bottom of the image, fades into the page. */
+.portrait-art {
+  position: absolute; inset: 0; overflow: hidden;
+  mask-image: linear-gradient(to bottom, #000 70%, transparent 98%);
 }
-/* Halftone: a fine dot screen multiplied over the greyscale photo. */
-.portrait::after {
-  content: ""; position: absolute; inset: 0;
-  background-image: radial-gradient(rgb(0 0 0 / 0.38) 0.6px, transparent 1px);
-  background-size: 3px 3px;
-  mix-blend-mode: multiply;
+.portrait img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.portrait .cap-layer {
+  position: absolute; inset: 0;
+  mask-image: linear-gradient(to bottom, #000 45%, transparent 55%);
+  mask-size: 100% 220%; mask-repeat: no-repeat;
+  mask-position: 0 100%; /* hidden: the transparent half covers the drawing */
+  transition: mask-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
+.portrait[data-cap="true"] .cap-layer { mask-position: 0 0; }
+/* The drawings have no background, so the no-cap hair would poke out around the cap. The plain
+   drawing wipes out along the same line the cap drawing wipes in: never both at once. */
+.portrait .plain-layer {
+  mask-image: linear-gradient(to bottom, transparent 45%, #000 55%);
+  mask-size: 100% 220%; mask-repeat: no-repeat;
+  mask-position: 0 100%; /* shown: the opaque half covers the drawing */
+  transition: mask-position 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.portrait[data-cap="true"] .plain-layer { mask-position: 0 0; }
+.cap-toggle {
+  all: unset; cursor: pointer; position: absolute; right: 8px; bottom: 8px;
+  padding: 4px 9px; border-radius: 999px; background: var(--ink); color: var(--on-ink);
+  font: 500 11px/1 var(--pixel); letter-spacing: 0.02em;
+  transition: transform 0.15s ease-out;
+}
+.cap-toggle:active { transform: scale(0.94); }
 .hero h1 { font: 500 42px/1.1 var(--pixel); margin: 0 0 18px; letter-spacing: -0.01em; }
 .hero p { margin: 0 0 14px; color: var(--muted); line-height: 2.05; }
 .pill {
   display: inline-flex; align-items: center; gap: 5px;
-  padding: 1px 9px; margin: 0 2px; border-radius: 999px;
+  padding: 1px 9px; margin: 0 0 0 2px; /* no right margin: punctuation sits right after the pill */ border-radius: 999px;
   background: var(--chip); color: var(--ink); font-weight: 500; line-height: 1.75;
   white-space: nowrap;
 }
@@ -188,18 +210,22 @@ html:has(.home) body {
 .post:hover .t { text-decoration: underline; text-underline-offset: 3px; }
 
 /* Fanned project stack */
-.stack-wrap { position: relative; height: 290px; margin-top: 36px; }
+/* Card and its click button read one size and share each position rule, so they can't drift apart. */
+.stack-wrap { --card-w: 252px; --card-h: 236px; position: relative; height: 320px; margin-top: 36px; }
 .pcard {
-  all: unset; box-sizing: border-box; cursor: pointer;
-  position: absolute; left: 50%; top: 16px; width: 252px; min-height: 206px;
+  all: unset; box-sizing: border-box;
+  position: absolute; left: 50%; top: 16px; width: var(--card-w); min-height: var(--card-h);
   padding: 16px 16px 18px; border: 1px solid var(--rule); border-radius: 14px;
   background: var(--page); box-shadow: var(--card-shadow);
   transition: transform 0.5s var(--ease), opacity 0.4s, filter 0.4s;
 }
-.pcard[data-pos="0"] { transform: translateX(-50%); z-index: 3; cursor: default; }
-.pcard[data-pos="-1"] { transform: translateX(-118%) translateY(36px) rotate(-11deg) scale(0.92); z-index: 1; opacity: 0.6; filter: blur(0.4px); }
-.pcard[data-pos="1"] { transform: translateX(18%) translateY(36px) rotate(11deg) scale(0.92); z-index: 1; opacity: 0.6; filter: blur(0.4px); }
-.pcard[data-pos="-1"]:hover, .pcard[data-pos="1"]:hover { opacity: 0.85; }
+.pcard-hit { all: unset; position: absolute; left: 50%; top: 16px; width: var(--card-w); height: var(--card-h); z-index: 2; cursor: pointer; border-radius: 14px; }
+.pcard[data-pos="0"] { transform: translateX(-50%); z-index: 3; }
+.pcard[data-pos="-1"], .pcard-hit[data-pos="-1"] { transform: translateX(-118%) translateY(36px) rotate(-11deg) scale(0.92); }
+.pcard[data-pos="1"], .pcard-hit[data-pos="1"] { transform: translateX(18%) translateY(36px) rotate(11deg) scale(0.92); }
+.pcard[data-pos="-1"], .pcard[data-pos="1"] { z-index: 1; opacity: 0.6; filter: blur(0.4px); }
+.pcard-hit:hover + .pcard, .pcard-hit:focus-visible + .pcard { opacity: 0.85; }
+.pcard[data-pos="hidden"] { opacity: 0; transform: translateX(-50%) translateY(60px) scale(0.85); z-index: 0; pointer-events: none; }
 .ptags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
 .ptag { font: 600 8.5px/1 var(--data); letter-spacing: 0.06em; text-transform: uppercase; padding: 5px 8px; border-radius: 999px; border: 1px solid var(--rule); color: var(--muted); }
 .ptag.solid { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
@@ -222,6 +248,68 @@ html:has(.home) body {
 .htag { font: 11.5px/1 var(--data); padding: 7px 9px; border: 1px solid var(--rule); border-radius: 4px; color: var(--muted); }
 .htag.more { border-style: dashed; }
 .htag.more:hover { color: var(--ink); }
+/* Logos lift and tilt a touch on hover: the tag feels picked up. */
+.htag .lg-mark { transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1); }
+.htag:hover .lg-mark, .htag:focus-visible .lg-mark { transform: translateY(-1px) rotate(-8deg) scale(1.15); }
+
+/* Stack explorer: filter buttons with a sliding highlight, tags that ease in, "used in" cards. */
+.stackx { position: relative; }
+.stackx-filters {
+  position: relative; display: flex; flex-wrap: wrap; gap: 2px; margin: 0 0 14px;
+  font: 11.5px/1 var(--data);
+}
+.stackx-filters button {
+  all: unset; position: relative; z-index: 1; cursor: pointer; padding: 7px 10px; border-radius: 999px;
+  color: var(--muted); transition: color 0.2s ease;
+}
+.stackx-filters button:hover { color: var(--ink); }
+.stackx-filters button[aria-pressed="true"] { color: var(--on-ink); }
+.stackx-count { margin-left: 6px; opacity: 0.55; font-size: 10.5px; }
+.stackx-glide {
+  position: absolute; top: 0; bottom: 0; border-radius: 999px; background: var(--ink);
+  transition: left 0.35s cubic-bezier(0.22, 1, 0.36, 1), width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* `backwards`, not `both`: once in, a tag keeps no transform, so it doesn't trap its card's z-index. */
+.stackx-tag, .stackx-wrap { animation: tag-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) backwards; animation-delay: calc(var(--i, 0) * 22ms); }
+@keyframes tag-in { from { opacity: 0; transform: translateY(6px) scale(0.97); } }
+.stackx-wrap { position: relative; display: inline-flex; }
+/* The tag whose card is open sits above the tags on the rows below it. */
+.stackx-wrap:has(> [aria-expanded="true"]) { z-index: 30; }
+.stackx-tag.has-used { all: unset; box-sizing: border-box; cursor: pointer; font: 11.5px/1 var(--data); padding: 7px 9px; border: 1px solid var(--rule); border-radius: 4px; color: var(--muted); }
+.stackx-tag.has-used:hover, .stackx-tag.has-used[aria-expanded="true"] { color: var(--ink); border-color: var(--ink); }
+.stackx-tag.has-used::after { content: ""; display: inline-block; width: 4px; height: 4px; margin-left: 7px; border-radius: 50%; background: currentColor; opacity: 0.5; vertical-align: middle; }
+.stackx-used {
+  position: absolute; z-index: 20; top: calc(100% + 6px); left: 0; min-width: 170px; max-width: 240px;
+  display: flex; flex-direction: column; gap: 6px; padding: 10px 12px;
+  background: var(--page); border: 1px solid var(--rule); border-radius: 8px; box-shadow: var(--card-shadow);
+  font: 12px/1.3 var(--data); color: var(--ink);
+  animation: used-in 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: top left;
+}
+.stackx-used[data-right] { left: auto; right: 0; transform-origin: top right; }
+.stackx-used[hidden] { display: none; }
+.stackx-used a:hover { text-decoration: underline; text-underline-offset: 3px; }
+/* A hover bridge so the mouse can travel from the tag to the card without it closing. */
+.stackx-used::before { content: ""; position: absolute; left: 0; right: 0; top: -8px; height: 8px; }
+@keyframes used-in { from { opacity: 0; transform: translateY(-4px) scale(0.97); } }
+
+/* Tools strip: two copies of the row slide left forever; hover or focus pauses it. */
+.tools { min-width: 0; }
+.tools-viewport {
+  /* inline-size containment: the very wide track must not widen the page (it did, to 1560px, on phones). */
+  overflow: hidden; contain: inline-size; min-width: 0;
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.tools-track { display: flex; width: max-content; animation: tools-scroll 38s linear infinite; }
+.tools-viewport:hover .tools-track, .tools-viewport:focus-within .tools-track { animation-play-state: paused; }
+.tools-row { display: flex; gap: 8px; padding: 0 8px 0 0; margin: 0; list-style: none; }
+@keyframes tools-scroll { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .tools-viewport { mask-image: none; }
+  .tools-track { width: auto; }
+  .tools-row { flex-wrap: wrap; }
+  .tools-row[aria-hidden="true"] { display: none; }
+}
 
 /* Cards (certifications, recommendations) */
 .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 28px; }
@@ -339,9 +427,9 @@ a.card:hover .verify { color: var(--ink); }
   .cards { grid-template-columns: 1fr; }
   .job { grid-template-columns: 52px 1fr; }
   .job .o { grid-column: 2; text-align: left; margin-top: -10px; }
-  .pcard { width: 236px; }
-  .pcard[data-pos="-1"] { transform: translateX(-100%) translateY(36px) rotate(-9deg) scale(0.88); }
-  .pcard[data-pos="1"] { transform: translateX(0%) translateY(36px) rotate(9deg) scale(0.88); }
+  .stack-wrap { --card-w: 236px; }
+  .pcard[data-pos="-1"], .pcard-hit[data-pos="-1"] { transform: translateX(-100%) translateY(36px) rotate(-9deg) scale(0.88); }
+  .pcard[data-pos="1"], .pcard-hit[data-pos="1"] { transform: translateX(0%) translateY(36px) rotate(9deg) scale(0.88); }
   .post { grid-template-columns: 1fr; }
   .post .d { grid-row: auto; grid-column: 1; }
 }
@@ -359,3 +447,102 @@ a.card:hover .verify { color: var(--ink); }
   outline-offset: 2px !important;
 }
 .tour button:focus-visible { outline-color: var(--on-ink) !important; }
+
+/* ── Logos (ADR 0006): brand colours kept; only the page around them is neutral ── */
+.lg { display: inline-flex; align-items: center; gap: 6px; vertical-align: middle; }
+.lg-mark { width: 14px; height: 14px; flex: none; }
+img.lg-mark { object-fit: contain; }
+.lg img.lg-mark.lg-wordmark { width: auto; height: 17px; } /* beats the square .lg-mark sizes below */
+.lg-generic { color: var(--muted); }
+/* Black marks (GitHub, OpenAI, Vercel) would vanish on the dark page; their brands ship white versions. */
+html.dark .lg-invert { filter: invert(1); }
+/* Wordmarks are text in brand colours (Workday blue fails AA on near-black), so in dark mode they
+   sit on a small light plate, the way brands ask their logos to be shown on dark backgrounds. */
+html.dark img.lg-wordmark { background: #ffffff; border-radius: 4px; padding: 1px 4px; box-sizing: content-box; }
+.pill .lg-mark { width: 15px; height: 15px; }
+.pill img.lg-mark.lg-wordmark { width: auto; height: 20px; }
+.hero .byday { font-size: 13px; color: var(--faint); margin-top: -4px; }
+.hero .byday .pill { font-weight: 500; }
+.social .lg-mark { width: 12px; height: 12px; }
+.htag.lg { gap: 7px; }
+.ltags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.ltag { font: 11px/1 var(--data); padding: 5px 8px; border: 1px solid var(--rule); border-radius: 999px; color: var(--muted); }
+.ltag .lg-mark { width: 12px; height: 12px; }
+
+/* Project cards */
+.picon-img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
+.picon:has(.picon-img) { border: 0; overflow: hidden; }
+.pcard.placeholder { border-style: dashed; box-shadow: none; background: var(--page); }
+
+/* Certification issuer logos */
+.issuer-logo { height: 36px; max-width: 100%; object-fit: contain; margin-bottom: 8px; }
+
+/* Contact: the reply form now lives here */
+.hello .reply { margin-top: 10px; }
+
+/* ── Portfolio pages: /projects, /experience, /certifications ── */
+.col.page { padding-top: 64px; }
+.page .back { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.page .back:hover { color: var(--ink); }
+.page h1 { font: 500 38px/1.1 var(--pixel); margin: 22px 0 10px; }
+.page-lede { color: var(--muted); margin: 0; }
+.page .sec { margin-top: 56px; }
+.prow { display: grid; grid-template-columns: 36px 1fr; gap: 16px; padding: 22px 0; scroll-margin-top: 24px; }
+.prow .picon { margin-top: 2px; }
+.prow-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; margin-bottom: 6px; font-size: 15px; }
+.prow-head b { font-weight: 500; }
+.prow .pdesc { margin-bottom: 10px; font-size: 13.5px; }
+.xrow { padding: 20px 0; display: grid; gap: 6px; }
+.xrow .prow-head { margin: 0; justify-content: space-between; }
+.xbullets { margin: 6px 0 0; padding-left: 18px; color: var(--muted); font-size: 13.5px; display: grid; gap: 4px; }
+.skill-group { display: grid; gap: 10px; padding: 18px 0; border-bottom: 1px solid var(--rule); }
+.page .paper { margin-top: 64px; color: var(--faint); font-size: 13px; }
+.page .paper a { text-decoration: underline; text-underline-offset: 3px; color: var(--muted); }
+.page .paper a:hover { color: var(--ink); }
+
+@media (max-width: 900px) {
+  .page h1 { font-size: 30px; }
+}
+/* The Workday wordmark carries wide built-in padding; give it room in the caption without growing the line. */
+.hero .byday img.lg-mark.lg-wordmark { width: auto; height: 28px; margin: -8px 0; }
+.hero .byday .pill:has(.lg-wordmark) { background: none; padding: 0 2px; }
+
+/* ── Hero v2: typed title, highlighted words, stacked AI logos ── */
+.typed {
+  display: inline-block; vertical-align: -0.28em; overflow: hidden; white-space: nowrap; width: auto;
+  font: 500 1.02em/1.5 var(--pixel); background: var(--ink); color: var(--on-ink);
+  padding: 0 8px; border-radius: 6px; box-sizing: content-box;
+  border-right: 2px solid transparent;
+  /* Types, holds, erases and types again (5s loop), one step per letter, caret always blinking.
+     Width animates between 0 and its natural size (interpolate-size is on in :root); browsers
+     without it simply show the words. The full text is in the HTML either way, and the global
+     reduced-motion rule turns the loop off. */
+  animation: typed-loop 5s steps(var(--chars), end) infinite 0.35s both, typed-caret 0.7s step-end infinite;
+}
+@keyframes typed-loop {
+  /* The element's steps(var(--chars)) timing applies to every phase: one step per letter. */
+  0% { width: 0; }
+  24% { width: auto; } /* typed (1.2s) */
+  74% { width: auto; } /* held (2.5s) */
+  90%, 100% { width: 0; } /* erased (0.8s), then a short empty pause */
+}
+/* Ghost and typed text share one grid cell: the ghost (invisible) fixes the width, so the line
+   around it stays still while the typed box grows and shrinks inside. */
+.typed-slot { display: inline-grid; vertical-align: baseline; } /* sits on the sentence baseline, like a word */
+.typed-slot > * { grid-area: 1 / 1; }
+.typed-ghost {
+  visibility: hidden; white-space: nowrap; font: 500 1.02em/1.5 var(--pixel);
+  padding: 0 8px; border-right: 2px solid transparent;
+}
+.typed-slot .typed { justify-self: start; vertical-align: baseline; }
+@keyframes typed-caret { 0%, 49% { border-right-color: var(--on-ink); } 50%, 100% { border-right-color: transparent; } }
+
+.pill.word { font-weight: 500; }
+.stackpill { gap: 8px; }
+.ai-stack { display: inline-flex; align-items: center; }
+.ai-dot {
+  width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--page); box-shadow: 0 0 0 1.5px var(--chip); margin-left: -7px;
+}
+.ai-dot:first-child { margin-left: -4px; }
+.ai-dot .lg-mark { width: 13px; height: 13px; }

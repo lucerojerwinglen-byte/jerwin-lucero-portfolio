@@ -80,3 +80,20 @@ footer's "take the tour again".
 **Coming-soon page**:
 `/shop`, `/gear`, `/resources`, `/collabs`, `/consulting`: one route (`src/app/[soon]`),
 listed in `soonPages`. Any other slug is a 404.
+
+**Portfolio pages**:
+`/projects`, `/experience`, `/certifications` (ADR 0006): the "see more" pages in the homepage
+style, so visitors stay on the portfolio. Components in `src/components/home/PortfolioPages.tsx`.
+
+**Logo**:
+A brand mark shown in its own colours next to its name (`<Logo name>`), resolved by
+`src/lib/logos.ts`. A **wordmark** (e.g. Workday) already spells the name and stands alone.
+A **generic** logo is a lucide icon for things that aren't brands (SQL, NLP, AES-GCM).
+
+**Featured cards**:
+The three fanned cards in 02 projects (`featured` in `home.ts`): Lovewin, CPT Tools and a
+"Next app" placeholder.
+
+**CPT Tools**:
+The 8-app internal suite (formerly "Team Operations Suite"). Named, but never shown with the
+employer's logo, links or screenshots.

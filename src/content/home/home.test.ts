@@ -3,7 +3,9 @@ import assert from "node:assert/strict";
 import { projects } from "@/content/data/projects";
 import { education } from "@/content/data/education";
 import { credentials } from "@/content/data/credentials";
-import { affiliations, badges, numberSections, recommendations, stats } from "./home";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import { affiliations, badges, featured, issuerLogo, issuerLogos, numberSections, recommendations, stats } from "./home";
 
 // ADR 0005 + PRODUCT.md: every claim on the homepage is checkable, nothing is invented.
 
@@ -56,4 +58,34 @@ test("recommendations are real (name, role, source) or clearly labelled placehol
 
 test("affiliations, if any, each have a source link", () => {
   for (const a of affiliations) assert.ok(a.source.startsWith("https://"), `${a.name} has no source`);
+});
+
+// ── ADR 0006 ──
+
+test("homepage cards are Lovewin, CPT Tools and a next-app placeholder; Barato is not a card", () => {
+  assert.deepEqual(
+    featured.map((c) => (c.kind === "project" ? c.slug : c.kind)),
+    ["lovewin", "team-ops-suite", "placeholder"],
+  );
+  assert.ok(projects.some((p) => p.slug === "barato"), "Barato must stay in the content layer (résumé, /projects)");
+});
+
+test("CPT Tools is named and never carries an employer logo", () => {
+  const cpt = projects.find((p) => p.slug === "team-ops-suite");
+  assert.equal(cpt?.title, "CPT Tools");
+  const card = featured.find((c) => c.kind === "project" && c.slug === "team-ops-suite");
+  assert.ok(card && card.kind === "project" && "generic" in card.icon, "CPT Tools must use a generic icon");
+});
+
+test("every credential issuer has a logo file, or uses initials on purpose (null)", () => {
+  for (const c of credentials) {
+    assert.ok(c.issuer in issuerLogos, `${c.issuer} has no entry in issuerLogos`);
+    const file = issuerLogos[c.issuer];
+    if (file) assert.ok(existsSync(join(process.cwd(), "public", file)), `${file} is missing`);
+  }
+});
+
+test("an issuer missing from issuerLogos fails loudly", () => {
+  assert.throws(() => issuerLogo("Unknown Issuer"), /issuerLogos has no entry for "Unknown Issuer"/);
+  assert.equal(issuerLogo("UNC"), null);
 });

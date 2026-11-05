@@ -1,45 +1,101 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Award, BadgeCheck, Building2, Database, FileSpreadsheet, GraduationCap, Mail, ScrollText, Sparkles, Wrench } from "lucide-react";
+import { ArrowRight, Award, GraduationCap, Layers, Mail, ScrollText, Sparkles } from "lucide-react";
 import { site } from "@/content/data/site";
 import { projects } from "@/content/data/projects";
 import { experience } from "@/content/data/experience";
 import { credentials } from "@/content/data/credentials";
-import { skills } from "@/content/data/skills";
-import { affiliations, badges, recommendations, stats, type Section } from "@/content/home/home";
+import {
+  affiliations,
+  badges,
+  featured,
+  hero,
+  issuerLogo,
+  recommendations,
+  stats,
+  toolsIUse,
+  type Section,
+} from "@/content/home/home";
+import type { Credential, Project } from "@/types/content";
 import { getAllPosts } from "@/lib/blog";
 import { formatRevDate } from "@/lib/document/document";
 import { getContributions } from "@/lib/github";
 import { dotLevels, DOT_SIZE } from "@/lib/home/dots";
 import { ProjectStack } from "./ProjectStack";
+import { Portrait } from "./Portrait";
+import { StackExplorer } from "./StackExplorer";
+import { stackGroups, usedInLink } from "@/lib/home/used-in";
 import { CopyEmail, TourAgain } from "./Buttons";
+import { Logo, LogoMark } from "./Logo";
+import { parseHero } from "@/lib/home/hero";
+import { requireLogo } from "@/lib/logos";
+import { ReplyForm } from "@/components/web/ReplyForm";
 
-const Pill = ({ icon: Icon, children }: { icon: typeof Wrench; children: React.ReactNode }) => (
-  <span className="pill">
-    <Icon className="ico" aria-hidden="true" />
-    {children}
-  </span>
-);
+/** Hero markup → text with a typed title, logo pills, highlighted words and stacked logos. */
+function HeroText({ text }: { text: string }) {
+  return (
+    <>
+      {parseHero(text).map((t, i) => {
+        switch (t.kind) {
+          case "text":
+            return t.text;
+          case "typed":
+            // Full text is in the HTML from the start; CSS only reveals it (loops; off under reduced motion).
+            // The invisible ghost reserves the full width, so the text around it never shifts while it types.
+            return (
+              <span key={i} className="typed-slot">
+                <span className="typed-ghost" aria-hidden="true">
+                  {t.text}
+                </span>
+                <span className="typed" style={{ "--chars": t.text.length } as React.CSSProperties}>
+                  {t.text}
+                </span>
+              </span>
+            );
+          case "logo":
+            return <Logo key={i} name={t.name} className="pill" />;
+          case "word":
+            return (
+              <span key={i} className="pill word">
+                {t.text}
+              </span>
+            );
+          case "stack":
+            return (
+              <span key={i} className="pill stackpill">
+                <span className="ai-stack" aria-hidden="true">
+                  {t.names.map((n) => (
+                    <span key={n} className="ai-dot">
+                      <LogoMark spec={requireLogo(n)} label={n} />
+                    </span>
+                  ))}
+                </span>
+                {t.label}
+                <span className="sr-only"> ({t.names.join(", ")})</span>
+              </span>
+            );
+        }
+      })}
+    </>
+  );
+}
 
 export function Hero() {
   return (
     <section className="hero" aria-label="Introduction">
-      <div className="portrait">
-        <Image src="/images/jerwin-hero.png" alt={`Portrait of ${site.shortName}`} width={440} height={420} priority />
-      </div>
+      <Portrait name={site.shortName} />
       <div>
         <h1>{site.shortName}</h1>
-        <p>
-          I’m a <Pill icon={Building2}>Workday</Pill> transactions analyst moving into <Pill icon={BadgeCheck}>QA</Pill>,{" "}
-          <Pill icon={Database}>data</Pill> &amp; <Pill icon={Sparkles}>AI</Pill>.
-        </p>
-        <p>
-          I verify HR data for a living and build the <Pill icon={Wrench}>tools</Pill> I wish I had. I love turning{" "}
-          <Pill icon={FileSpreadsheet}>messy exports</Pill> into things my team actually uses.
+        {hero.paragraphs.map((p) => (
+          <p key={p}>
+            <HeroText text={p} />
+          </p>
+        ))}
+        <p className="byday">
+          <HeroText text={hero.caption} />
         </p>
         <div className="social">
           <a href={site.social.github} target="_blank" rel="noreferrer">
-            github ↗
+            <Logo name="GitHub" /> ↗
           </a>
           <Link href="/resume" data-tour="resume">
             résumé ↗
@@ -128,15 +184,124 @@ export function Blog() {
   );
 }
 
-export function Projects() {
-  return <ProjectStack projects={projects.filter((p) => p.section === "selected")} />;
+export function ProjectTags({ tags }: { tags: string[] }) {
+  return (
+    <span className="ltags">
+      {tags.map((t) => (
+        <Logo key={t} name={t} className="ltag" />
+      ))}
+    </span>
+  );
 }
 
-const stackTags = skills
-  .filter((g) => !["Spoken", "Tools"].includes(g.category))
-  .flatMap((g) => g.items.map((i) => i.name.replace(/\s*\(.*\)$/, "")))
-  .filter((n) => !/testing|manual|engineering|explainable|assisted/i.test(n))
-  .slice(0, 12);
+/** The project's own links, or the internal note. Shared by the cards and /projects. */
+export function ProjectLinks({ p }: { p: Project }) {
+  return (
+    <div className="plinks">
+      {p.internal && <span>employer-internal · no code or link</span>}
+      {p.liveUrl && (
+        <a href={p.liveUrl} target="_blank" rel="noreferrer">
+          open ↗
+        </a>
+      )}
+      {p.repoUrl && (
+        <a href={p.repoUrl} target="_blank" rel="noreferrer">
+          code ↗
+        </a>
+      )}
+    </div>
+  );
+}
+
+/** A featured project's icon (real app icon or the generic stack), or null if it isn't featured. */
+export function featuredIcon(slug: string): React.ReactNode | null {
+  const card = featured.find((c) => c.kind === "project" && c.slug === slug);
+  if (card?.kind !== "project") return null;
+  return "file" in card.icon ? (
+    // eslint-disable-next-line @next/next/no-img-element -- a 36px app icon
+    <img src={card.icon.file} alt="" className="picon-img" />
+  ) : (
+    <Layers className="ico" aria-hidden="true" />
+  );
+}
+
+const statusOf = (p: Project) => (p.internal ? "internal" : p.liveUrl ? "live" : "open source");
+
+/** The card body, rendered on the server so logos never ship the whole logo set to the browser. */
+function CardBody({ p, icon }: { p: Project; icon: React.ReactNode }) {
+  return (
+    <>
+      <div className="ptags">
+        <span className="ptag solid">{statusOf(p)}</span>
+      </div>
+      <div className="ptitle">
+        <span className="picon" aria-hidden="true">
+          {icon}
+        </span>
+        {p.title}
+      </div>
+      <p className="pdesc">{p.description}</p>
+      <ProjectTags tags={p.tags.slice(0, 3)} />
+      <ProjectLinks p={p} />
+    </>
+  );
+}
+
+export function Projects() {
+  const cards = featured.map((c) => {
+    if (c.kind === "placeholder") {
+      return {
+        key: "placeholder",
+        label: c.title,
+        placeholder: true,
+        content: (
+          <>
+            <div className="ptags">
+              <span className="ptag">coming soon</span>
+            </div>
+            <div className="ptitle">
+              <span className="picon" aria-hidden="true">
+                <Sparkles className="ico" />
+              </span>
+              {c.title}
+            </div>
+            <p className="pdesc">{c.text}</p>
+          </>
+        ),
+      };
+    }
+    const p = projects.find((x) => x.slug === c.slug);
+    if (!p) throw new Error(`featured card "${c.slug}" matches no project in src/content/data/projects.ts`);
+    return { key: p.slug, label: p.title, content: <CardBody p={p} icon={featuredIcon(p.slug)} /> };
+  });
+  return <ProjectStack cards={cards} />;
+}
+
+/** The tools strip: an endless row that pauses on hover; a plain wrapped row with reduced motion. */
+export function ToolsStrip() {
+  const row = (copy: boolean) => (
+    <ul className="tools-row" aria-hidden={copy || undefined}>
+      {toolsIUse.map((t) => (
+        <li key={t}>
+          <Logo name={t} className="htag" />
+        </li>
+      ))}
+    </ul>
+  );
+  return (
+    <div className="tools" data-tour="tools">
+      <div className="sub-head">
+        <span className="caps">Tools I use</span>
+      </div>
+      <div className="tools-viewport">
+        <div className="tools-track">
+          {row(false)}
+          {row(true)}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function Experience() {
   return (
@@ -152,50 +317,64 @@ export function Experience() {
       </ul>
       <div className="sub-head">
         <span className="caps">Stack</span>
-        <Link className="caps" href="/resume#skills">
+        <Link className="caps" href="/experience#stack">
           View all →
         </Link>
       </div>
-      <div className="htags">
-        {stackTags.map((t) => (
-          <span key={t} className="htag">
-            {t}
-          </span>
-        ))}
-        <Link className="htag more" href="/resume#skills">
-          + more
-        </Link>
-      </div>
+      <StackExplorer
+        moreHref="/experience#stack"
+        groups={stackGroups.map((g) => ({
+          label: g.label,
+          tags: g.items.map((s) => ({
+            key: s.name,
+            node: <Logo name={s.name} />,
+            usedIn: (s.usedIn ?? []).map(usedInLink),
+          })),
+        }))}
+      />
+      <ToolsStrip />
     </>
+  );
+}
+
+export function IssuerLogo({ issuer }: { issuer: string }) {
+  const file = issuerLogo(issuer);
+  return file ? (
+    // eslint-disable-next-line @next/next/no-img-element -- small local logo; alt is empty because the issuer is printed below it
+    <img className="issuer-logo" src={file} alt="" />
+  ) : (
+    <span className="logo mono" aria-hidden="true">
+      {issuer.slice(0, 3)}
+    </span>
+  );
+}
+
+export function CredentialCard({ c }: { c: Credential }) {
+  const inner = (
+    <>
+      <IssuerLogo issuer={c.issuer} />
+      <span className="ct">{c.title}</span>
+      <span className="caps">
+        {c.issuer} · {c.date}
+      </span>
+      <span className="verify">{c.verifyUrl ? "‹ verify ›" : c.kind}</span>
+    </>
+  );
+  return c.verifyUrl ? (
+    <a className="card" href={c.verifyUrl} target="_blank" rel="noreferrer">
+      {inner}
+    </a>
+  ) : (
+    <div className="card">{inner}</div>
   );
 }
 
 export function Certifications() {
   return (
     <div className="cards">
-      {credentials.slice(0, 3).map((c) => {
-        const inner = (
-          <>
-            <span className="logo mono" aria-hidden="true">
-              {c.issuer.slice(0, 3)}
-            </span>
-            <span className="ct">{c.title}</span>
-            <span className="caps">
-              {c.issuer} · {c.date}
-            </span>
-            <span className="verify">{c.verifyUrl ? "‹ verify ›" : c.kind}</span>
-          </>
-        );
-        return c.verifyUrl ? (
-          <a key={c.title} className="card" href={c.verifyUrl} target="_blank" rel="noreferrer">
-            {inner}
-          </a>
-        ) : (
-          <div key={c.title} className="card">
-            {inner}
-          </div>
-        );
-      })}
+      {credentials.slice(0, 3).map((c) => (
+        <CredentialCard key={c.title} c={c} />
+      ))}
     </div>
   );
 }
@@ -288,7 +467,7 @@ export function Contact() {
     <section className="hello" aria-labelledby="hello">
       <span className="caps">Get in touch</span>
       <h2 id="hello">say hello</h2>
-      <p>Hiring for QA, data or AI, or just want to talk shop? I usually reply within a day (UTC+8).</p>
+      <p>Building something, hiring, or just want to talk shop? I usually reply within a day (UTC+8).</p>
       <div className="row">
         <span className="mono">{site.email}</span>
         <CopyEmail email={site.email} />
@@ -296,10 +475,8 @@ export function Contact() {
           <Mail className="ico" aria-hidden="true" />
           Open mail app
         </a>
-        <Link className="hbtn" href="/resume#contact">
-          Send a message <ArrowUpRight className="ico" aria-hidden="true" />
-        </Link>
       </div>
+      <ReplyForm />
     </section>
   );
 }

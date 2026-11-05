@@ -23,7 +23,9 @@ skim and either downloads the PDF or sends a message.
 
 ## Positioning
 
-A working analyst who verifies data for a living and builds real, shipped tools on the side:
+Homepage (ADR 0006): a curious software engineer who builds web and mobile apps with
+generative AI (Claude, ChatGPT, Gemini), with the day job shown honestly as a caption.
+Résumé: a working analyst who verifies data for a living and builds real, shipped tools on the side:
 a live end-to-end-encrypted app (Lovewin), a live optimizer with a validated data pipeline
 (Barato), and an 8-app internal suite in production. The site itself demonstrates the
 precision it claims: the web page and the PDF are the same, verified document.
@@ -47,17 +49,19 @@ precision it claims: the web page and the PDF are the same, verified document.
 
 ## Brand Commitments
 
-- Name: Jerwin Glen A. Lucero (short: Jerwin Lucero). Role line: "QA · Data · AI — Workday
-  Transactions Analyst at Sagility".
+- Name: Jerwin Glen A. Lucero (short: Jerwin Lucero). Résumé role line: "QA · Data · AI — Workday
+  Transactions Analyst at Sagility". Homepage: "software engineer", with "By day: Workday
+  Transactions Analyst at Sagility" always visible (ADR 0006).
 - Honest framing of the pivot: never overstate titles, numbers, or skills.
 
 ## Evidence on Hand
 
 - Projects, experience, education, skills, credentials: `src/content/data/`.
 - Live apps: Lovewin (https://lovewin.ottie.workers.dev), Barato (https://barato.pages.dev).
-- Internal suite facts (8 apps, 58 recorded decisions) — employer-internal: anonymized, no
-  company names, no links, no screenshots.
-- Portrait: `public/images/jerwin-hero.png` (transparent background).
+- Internal suite facts (8 apps, 58 recorded decisions) — named "CPT Tools" (ADR 0006, employer
+  allows it); still no employer logo, no links, no screenshots.
+- Portrait: `public/images/jerwin-hero.png` (transparent background) on the résumé; the homepage
+  uses the drawings `jerwin-nocap.webp` / `jerwin-cap.webp` with a cap toggle (ADR 0006).
 - **Absent, never fabricate:** testimonials, recommendations, metrics beyond the above,
   employer endorsements. The homepage shows labelled placeholders for recommendations
   until real ones (with a public source) exist.

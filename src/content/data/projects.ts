@@ -31,7 +31,7 @@ export const projects: Project[] = [
   },
   {
     slug: "team-ops-suite",
-    title: "Team Operations Suite",
+    title: "CPT Tools",
     description:
       "Eight connected apps for a two-region operations team (case tracking, attendance, scoring, quality audits, forecasting) on one login and database, in production; 58 recorded architecture decisions.",
     tags: ["React", "Hono", "Cloudflare D1", "Playwright"],
