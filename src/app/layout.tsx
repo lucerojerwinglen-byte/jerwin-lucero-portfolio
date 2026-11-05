@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Source_Serif_4 } from "next/font/google";
+import { GeistPixelSquare } from "geist/font/pixel";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { site } from "@/content/data/site";
@@ -14,7 +15,7 @@ const serif = Source_Serif_4({
   axes: ["opsz"],
 });
 
-const title = `${site.shortName} — Résumé · ${site.focus}`;
+const title = `${site.shortName} — ${site.focus}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -30,7 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       suppressHydrationWarning
       data-notes="on"
-      className={`${geistSans.variable} ${geistMono.variable} ${serif.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} ${serif.variable} ${GeistPixelSquare.variable}`}
     >
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>

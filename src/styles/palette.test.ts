@@ -7,10 +7,12 @@ import { join } from "node:path";
 // colours that actually ship, in both themes.
 
 const css = readFileSync(join(process.cwd(), "src/styles/document.css"), "utf8");
+const homeCss = readFileSync(join(process.cwd(), "src/styles/home.css"), "utf8");
 
-function block(selector: string): Record<string, string> {
-  const re = new RegExp(`(^|\\n)${selector.replace(".", "\\.")}\\s*\\{([^}]*)\\}`, "g");
-  for (const m of css.matchAll(re)) {
+function block(selector: string, source = css): Record<string, string> {
+  const escaped = selector.replace(/[.():]/g, (c) => `\\${c}`);
+  const re = new RegExp(`(^|\\n)${escaped}\\s*\\{([^}]*)\\}`, "g");
+  for (const m of source.matchAll(re)) {
     if (!m[2].includes("--page:")) continue;
     const tokens: Record<string, string> = {};
     for (const t of m[2].matchAll(/--([\w-]+):\s*(#[0-9a-fA-F]{6})\s*;/g)) tokens[t[1]] = t[2];
@@ -69,6 +71,46 @@ for (const [theme, selector] of [
     const p = block(selector);
     const failures: string[] = [];
     for (const [fg, bg] of PAIRS) {
+      assert.ok(p[fg], `${theme} is missing --${fg}`);
+      assert.ok(p[bg], `${theme} is missing --${bg}`);
+      const ratio = contrast(p[fg], p[bg]);
+      if (ratio < 4.5) failures.push(`--${fg} on --${bg}: ${ratio.toFixed(2)}:1`);
+    }
+    assert.deepEqual(failures, []);
+  });
+}
+
+// ADR 0005: the homepage is neutrals only. Its tokens override the résumé's on
+// html:has(.home), so components reused from the résumé (typing test, reply form) follow.
+const HOME_PAIRS: [string, string][] = [
+  ["ink", "page"],
+  ["muted", "page"],
+  ["faint", "page"], // section numbers, dates, small caps labels
+  ["pen", "page"], // links: same as ink on the homepage
+  ["live", "page"],
+  ["error", "page"],
+  ["ink", "canvas"],
+  ["muted", "canvas"],
+  ["on-ink", "ink"], // the dark pill badges
+];
+
+test("homepage: no accent, only status colours (live, error)", () => {
+  const p = block("html:has(.home)", homeCss);
+  const chromatic = Object.entries(p)
+    .filter(([, hex]) => saturation(hex) > 24)
+    .map(([k]) => k)
+    .sort();
+  assert.deepEqual(chromatic, ["error", "live"]);
+});
+
+for (const [theme, selector] of [
+  ["homepage light", "html:has(.home)"],
+  ["homepage dark", "html.dark:has(.home)"],
+] as const) {
+  test(`${theme}: every text/background pair meets WCAG AA (4.5:1)`, () => {
+    const p = block(selector, homeCss);
+    const failures: string[] = [];
+    for (const [fg, bg] of HOME_PAIRS) {
       assert.ok(p[fg], `${theme} is missing --${fg}`);
       assert.ok(p[bg], `${theme} is missing --${bg}`);
       const ratio = contrast(p[fg], p[bg]);

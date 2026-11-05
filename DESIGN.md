@@ -22,6 +22,10 @@ typography:
 
 # Design
 
+> **Two surfaces.** The homepage (`/`) follows ADR 0005: a portfolio page, described in
+> "Homepage" at the end. Everything else in this file describes the résumé at `/resume`
+> (ADR 0004), which is unchanged.
+
 Decision and reasons: [ADR 0004](docs/adr/0004-the-site-is-the-resume.md).
 
 ## Principles
@@ -56,3 +60,21 @@ Decision and reasons: [ADR 0004](docs/adr/0004-the-site-is-the-resume.md).
 Sheets settle in (0.7s, ease-out quint) and details expand by height. The progress line is
 driven by scroll alone, and tooltips appear after 250ms. Everything is off under
 `prefers-reduced-motion`.
+
+## Homepage (ADR 0005)
+
+- **Layout:** fixed 224px sidebar (pages, section jumps, Alt+K / Alt+J hints, viewer count,
+  system/light/dark switch, email) and one centered 624px column. At ≤900px the sidebar
+  becomes a top bar with a menu.
+- **Colour:** neutrals only, no accent: white page, near-black ink, greys. Live green and
+  error red stay status-only. Tokens override the résumé's names on `html:has(.home)` so
+  reused components (typing test) follow; checked by `palette.test.ts`.
+- **Type:** Geist Pixel Square (from the `geist` package) for the name, card titles and
+  "say hello"; Geist body; Geist Mono for data, labels and section numbers.
+- **Decoration:** halftone only. A faded dot grid in corners and between blocks, and the
+  portrait in greyscale with a 3px dot screen.
+- **Sections:** `NN — title` headers over a dashed rule, renumbered when one is hidden.
+  Projects are a fanned stack of three cards; GitHub contributions are drawn as dots sized
+  0–4 by activity.
+- **Motion:** card fan 0.5s ease-out quint; overlays fade/rise in about 0.2s; all off under
+  `prefers-reduced-motion`.

@@ -25,9 +25,9 @@ export default async function BlogPostPage({ params }: PageProps<"/blog/[slug]">
   return (
     <main className="article-wrap">
       <article className="sheet article">
-        <Link className="back" href="/#writing">
+        <Link className="back" href="/">
           <ArrowLeft className="ico" aria-hidden="true" />
-          Back to the résumé
+          Back home
         </Link>
         <p className="date">{formatRevDate(post.date)}</p>
         <h1>{post.title}</h1>

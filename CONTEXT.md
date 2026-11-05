@@ -3,7 +3,7 @@
 Personal portfolio site for Jerwin Glen A. Lucero (Workday Transactions Analyst at Sagility,
 with a Computer Science background). Next.js (App Router) + TypeScript + Tailwind CSS,
 deployed on Vercel with auto-deploy on push to `main`. Visual direction lives in
-[DESIGN.md](DESIGN.md); the résumé decision is ADR 0004. `plans/` holds animation tickets for components that ADR 0004 removed.
+[DESIGN.md](DESIGN.md). The homepage is a portfolio page (ADR 0005); the résumé lives at `/resume` (ADR 0004). `plans/` holds animation tickets for components that ADR 0004 removed.
 
 ## Language
 
@@ -12,7 +12,7 @@ The typed data files in `src/content/data/` (site, projects, experience, educati
 credentials). The single source for the page and therefore the PDF.
 
 **Document**:
-The 2-page A4 résumé that is the homepage (`src/components/doc/`, `src/styles/document.css`).
+The 2-page A4 résumé at `/resume` (`src/components/doc/`, `src/styles/document.css`).
 Everything in it is printed. See ADR 0004.
 
 **Sheet**:
@@ -55,3 +55,28 @@ The "Reply" form on the web-only sheet, backed by Resend. Degrades gracefully if
 
 **Typing test**:
 Appendix A on the web-only sheet (`TypingTest.tsx`, snippets in `typing-snippets.ts`).
+
+**Homepage**:
+The portfolio page at `/` (ADR 0005): sidebar plus one column of numbered sections, neutrals
+only. Not printed. Styles in `src/styles/home.css`, components in `src/components/home/`.
+
+**Home content**:
+`src/content/home/home.ts`: section order, badges, stats, recommendations, affiliations,
+coming-soon pages. Outside the content layer on purpose, so it never changes the PDF
+fingerprint. Every badge and stat cites evidence; checked by `home.test.ts`.
+
+**Placeholder**:
+A clearly labelled empty slot (e.g. a recommendation card reading "Recommendation slot")
+standing in for real content that doesn't exist yet. Never carries a person's name.
+
+**Ask palette**:
+The Alt+K (or Ctrl K) search box on the homepage. Searches sections, pages, projects and
+posts by title and keywords (`src/lib/home/search.ts`). Not AI.
+
+**Tour**:
+The first-visit walkthrough on the homepage; remembered in localStorage, replayed from the
+footer's "take the tour again".
+
+**Coming-soon page**:
+`/shop`, `/gear`, `/resources`, `/collabs`, `/consulting`: one route (`src/app/[soon]`),
+listed in `soonPages`. Any other slug is a 404.

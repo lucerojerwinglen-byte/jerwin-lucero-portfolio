@@ -2,6 +2,7 @@
 /* The whole visual system lives in the document stylesheet (ADR 0004).
    Tailwind stays for its reset, utilities like sr-only, and blog prose. */
 @import "../styles/document.css";
+@import "../styles/home.css";
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:where(.dark, .dark *));
