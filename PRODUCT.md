@@ -16,7 +16,7 @@ international remote roles (UTC+8).
 
 ## Product Purpose
 
-Jerwin Glen A. Lucero's personal site **is his résumé**: one document that reads well on
+Jerwin Glen A. Lucero's personal site is a portfolio homepage (ADR 0005) with **his résumé at `/resume`**: one document that reads well on
 screen, prints or downloads as a clean 2-page PDF, and makes the case for a career pivot from
 Workday HR transactions into QA, data and AI. Success: a recruiter understands the fit in one
 skim and either downloads the PDF or sends a message.
@@ -40,6 +40,8 @@ precision it claims: the web page and the PDF are the same, verified document.
 - Next.js 16 (App Router) + TypeScript + Tailwind 4; tests via `node:test` (`npm test`).
 - Web-only features (never printed): find-in-document (Ctrl+K), contact form (Resend),
   Appendix A typing test, live reader count (Supabase), margin notes, page counter.
+- Homepage features: Alt+K ask palette, Alt+J typing test, viewer count, theme switch,
+  first-visit tour, GitHub contribution dots (`GITHUB_TOKEN`, free; hidden message if unset).
 - Zero budget: no paid services or recurring bills.
 - The fit-check feature was removed by decision (2026-11-04); recoverable from commit ddeeb4c.
 
@@ -57,7 +59,8 @@ precision it claims: the web page and the PDF are the same, verified document.
   company names, no links, no screenshots.
 - Portrait: `public/images/jerwin-hero.png` (transparent background).
 - **Absent, never fabricate:** testimonials, recommendations, metrics beyond the above,
-  employer endorsements.
+  employer endorsements. The homepage shows labelled placeholders for recommendations
+  until real ones (with a public source) exist.
 
 ## Product Principles
 

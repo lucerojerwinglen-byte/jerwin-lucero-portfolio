@@ -57,7 +57,7 @@ async function main() {
 
     const port = 4100 + Math.floor(Math.random() * 800); // fresh port: a killed server can hold the old one
     server = spawn(process.execPath, [NEXT_BIN, "start", "-p", String(port)], { stdio: "ignore" });
-    const url = `http://localhost:${port}/`;
+    const url = `http://localhost:${port}/resume`;
     await waitForServer(url, server);
 
     const browser = await chromium.launch({ channel: "msedge" });

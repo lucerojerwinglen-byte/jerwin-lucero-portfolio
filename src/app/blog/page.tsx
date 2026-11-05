@@ -11,9 +11,9 @@ export default function BlogIndexPage() {
   return (
     <main className="article-wrap">
       <article className="sheet article">
-        <Link className="back" href="/#writing">
+        <Link className="back" href="/">
           <ArrowLeft className="ico" aria-hidden="true" />
-          Back to the résumé
+          Back home
         </Link>
         <h1>Writing</h1>
         <ul className="posts">
