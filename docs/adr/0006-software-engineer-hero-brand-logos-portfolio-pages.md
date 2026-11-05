@@ -57,6 +57,21 @@ real logos everywhere, and to keep visitors inside the portfolio.
   `src/content/home/home.ts`, not `skills.ts`, so the résumé and PDF are unchanged; they are also
   listed on /experience.
 
+- **Anthropic certificates (added 2026-11-05).** Four Anthropic Education certificates (Claude Code
+  in Action, Introduction to agent skills, Introduction to subagents, Claude Code 101) are on the
+  homepage (with the CSC and Git & GitHub cards) and on /certifications under "AI learning". Each
+  card links to its Skilljar verify page and to a PDF copy in `public/certificates/`. Website only:
+  the résumé's credentials and PDF are unchanged. The Anthropic logo comes from the Iconify set,
+  white in dark mode. Facts come from the verify pages; no hours or skills are claimed.
+
+- **Playful hover on every component (added 2026-11-05).** `src/styles/hover.css`: elements lift,
+  tilt and overshoot (`--spring`), text links draw their underline, cards and tags pop, the fan's
+  side cards come forward, dots swell, overlay rows slide. Jerwin chose "playful" over "subtle".
+  Only for a real mouse (`hover: hover` and `pointer: fine`) and only when motion is allowed;
+  touch and reduced-motion visitors keep the plain colour changes. The résumé page and PDF are not
+  touched. Hover effects use `translate`/`rotate`/`scale` so they never replace the fan's `transform`.
+  The portrait does not follow the cursor (removed earlier); it only turns slightly on hover.
+
 ## Consequences
 
 - One new dependency (`@iconify-json/logos`, ~2,300 logos). Logo data is read on the server and

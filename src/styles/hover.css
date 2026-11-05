@@ -1,0 +1,135 @@
+﻿/* Playful hover (2026-11-05): everything you can point at answers the cursor, in one consistent
+   language: lift, tilt a little, overshoot and settle (--spring), links draw their underline.
+   Only for a real mouse (no sticky hover on phones) and only when motion is allowed; visitors who
+   reduce motion keep the plain colour changes in home.css. Neutral: tokens and black shadows only.
+   Uses the individual `translate` / `rotate` / `scale` properties, never `transform`, so these
+   stack on top of the cards' fan positions and the entrance animations instead of replacing them. */
+
+html:has(.home) { --spring: cubic-bezier(0.34, 1.56, 0.64, 1); --lift-shadow: 0 2px 4px rgb(0 0 0 / 0.06), 0 22px 44px -14px rgb(0 0 0 / 0.32); }
+
+/* Room for lifted tags in the scrolling strip (it clips overflow). */
+.tools-viewport { padding: 8px 0; margin: -8px 0; }
+/* translate / rotate / scale don't apply to plain inline boxes. */
+.facts .stat .v, .facts .stat sup { display: inline-block; }
+.side .brand { transform-origin: left center; }
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  /* ── Anti-flicker: an element that lifts would slip out from under a mouse entering from below,
+     drop back, and flicker. A hidden strip under it (as tall as the lift) keeps it hovered. ── */
+  .card, .quote, .htag, .stackx-tag.has-used, .hbtn, .facts a.stat, .pill, .social a, .ltag, .ptag, .hello .reply .btn { position: relative; }
+  .card::before, .quote::before, .htag::before, .stackx-tag.has-used::before, .hbtn::before, .facts a.stat::before,
+  .pill::before, .social a::before, .ltag::before, .ptag::before, .hello .reply .btn::before, .pcard[data-pos="0"]::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 100%; height: var(--lift-gap, 9px);
+  }
+  /* The tag's strip sits over the gap to its "used in" card, so the pointer stays on the tag while crossing it. */
+  .stackx-tag.has-used { z-index: 21; }
+  .card, .quote, .pcard[data-pos="0"] { --lift-gap: 12px; }
+  /* Small links inside a lifting card: a taller hit area so the lift doesn't move them out from under the pointer. */
+  .card .card-links a { padding-block: 10px; margin-block: -10px; }
+
+  /* ── Transitions: what is allowed to animate, per component ── */
+  .side nav a { transition: color 0.15s, translate 0.3s var(--spring); }
+  .side nav a .ico, .side .keys kbd, .side .seg button, .side .mail .ico, .side .presence .avatar,
+  .side .brand { transition: translate 0.3s var(--spring), rotate 0.3s var(--spring), scale 0.3s var(--spring), color 0.15s, background-color 0.15s; }
+  .pill, .ai-dot, .portrait, .cap-toggle, .hbtn, .stackx-filters button, .tour button, .panel .close,
+  .stack-dots button, .htag, .stackx-tag.has-used, .ltag, .ptag {
+    transition: translate 0.35s var(--spring), rotate 0.35s var(--spring), scale 0.35s var(--spring),
+      box-shadow 0.25s, border-color 0.2s, color 0.2s, background-color 0.2s;
+  }
+  .social a, .facts .stat, .facts .stat .v, .facts .stat sup, .facts .badge .ico, .post .t, .post .ex,
+  .job .r, .job .o, .job .y, .xrow .prow-head b, .page .back, .page .back .ico, .sec-head a .ico,
+  .prow .picon, .stackx-used a, .plinks a, .panel .results a {
+    transition: translate 0.35s var(--spring), rotate 0.35s var(--spring), scale 0.35s var(--spring), color 0.2s, background-color 0.2s;
+  }
+  .card, .quote { transition: translate 0.4s var(--spring), rotate 0.4s var(--spring), box-shadow 0.3s, border-color 0.2s; }
+  .card .issuer-logo, .card .issuer-mark, .card .logo, .card .ini, .quote .ini { transition: rotate 0.4s var(--spring), scale 0.4s var(--spring); }
+  .pcard[data-pos] { transition: transform 0.5s var(--ease), opacity 0.4s, filter 0.4s, translate 0.4s var(--spring), rotate 0.4s var(--spring), scale 0.4s var(--spring), box-shadow 0.3s; }
+  .pcard .picon, .pcard .picon-img { transition: rotate 0.4s var(--spring), scale 0.4s var(--spring); }
+  .gh-grid i::before { transition: scale 0.25s var(--spring); }
+  .hbtn { transition: translate 0.35s var(--spring), rotate 0.35s var(--spring), scale 0.35s var(--spring), box-shadow 0.25s, background-color 0.15s; }
+
+  /* ── Links: the underline draws in from the left ── */
+  .social a, .sec-head a, .plinks a, .stackx-used a, .card .card-links a, .page .back, .side .mail {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat; background-position: 0 100%; background-size: 0 1.5px;
+    transition-property: background-size, translate, rotate, scale, color; transition-duration: 0.3s, 0.35s, 0.35s, 0.35s, 0.2s;
+    transition-timing-function: var(--ease), var(--spring), var(--spring), var(--spring), ease;
+  }
+  .social a:hover, .sec-head a:hover, .plinks a:hover, .stackx-used a:hover, .card .card-links a:hover,
+  .page .back:hover, .side .mail:hover { background-size: 100% 1.5px; text-decoration: none; }
+
+  /* ── Sidebar ── */
+  .side nav a:hover { translate: 5px 0; }
+  .side nav a:hover .ico { rotate: -12deg; scale: 1.25; }
+  .side .brand:hover { rotate: -2deg; scale: 1.06; }
+  .side .keys button:hover kbd { rotate: -7deg; scale: 1.18; color: var(--ink); }
+  .side .seg button:hover { scale: 1.25; rotate: -6deg; color: var(--ink); }
+  .side .mail:hover .ico { rotate: -14deg; scale: 1.2; }
+  .side .presence .avatar:hover { scale: 1.2; rotate: 8deg; }
+
+  /* ── Hero ── */
+  .pill:hover { rotate: -3deg; scale: 1.08; translate: 0 -2px; }
+  .pill.word:hover { rotate: 3deg; }
+  .ai-dot:hover { translate: 0 -4px; scale: 1.25; z-index: 2; }
+  .social a:hover { translate: 0 -2px; }
+  .portrait:hover { rotate: -2deg; scale: 1.04; }
+  .cap-toggle:hover { scale: 1.12; rotate: 3deg; }
+
+  /* ── Facts ── */
+  .facts .badge:hover .ico { rotate: -14deg; scale: 1.35; }
+  .facts a.stat:hover { translate: 0 -3px; }
+  .facts a.stat:hover .v { scale: 1.1; transform-origin: left; }
+  .facts a.stat:hover sup { translate: 3px -3px; scale: 1.4; color: var(--ink); }
+  .sec-head a:hover .ico { translate: 4px 0; }
+
+  /* ── Lists ── */
+  .post:hover .t, .post:hover .ex { translate: 8px 0; }
+  .job:hover .r { translate: 8px 0; }
+  .job:hover .o { translate: -6px 0; color: var(--ink); }
+  .job:hover .y { color: var(--ink); translate: -2px 0; }
+  .xrow:hover .prow-head b { translate: 8px 0; }
+  .prow:hover .picon { rotate: -10deg; scale: 1.18; }
+  .page .back:hover { translate: -5px 0; }
+  .page .back:hover .ico { translate: -3px 0; }
+
+  /* ── Project cards (the fan) ── */
+  .pcard[data-pos="0"]:hover { translate: 0 -9px; rotate: -1.2deg; scale: 1.025; box-shadow: var(--lift-shadow); }
+  .pcard[data-pos="0"]:hover .picon, .pcard[data-pos="0"]:hover .picon-img { rotate: 12deg; scale: 1.2; }
+  .pcard-hit:hover + .pcard, .pcard-hit:focus-visible + .pcard { translate: 0 -16px; scale: 1.06; box-shadow: var(--lift-shadow); }
+  .stack-dots button:hover { scale: 2; }
+  .plinks a:hover { translate: 2px 0; }
+
+  /* ── Tags and chips ── */
+  .htag:hover, .stackx-tag.has-used:hover { translate: 0 -3px; rotate: -1.5deg; border-color: var(--ink); color: var(--ink); box-shadow: 0 8px 16px -10px rgb(0 0 0 / 0.4); }
+  .htag.more:hover { rotate: 2.5deg; scale: 1.08; }
+  .ltag:hover, .ptag:hover { translate: 0 -2px; rotate: -2deg; }
+  .stackx-filters button:hover { scale: 1.12; rotate: -2deg; }
+  .stackx-used a:hover { translate: 3px 0; }
+
+  /* ── Cards: certifications, recommendations ── */
+  .card:hover, .quote:hover { translate: 0 -8px; rotate: -1deg; box-shadow: var(--lift-shadow); border-color: var(--ink); }
+  .cards .card:nth-child(even):hover { rotate: 1deg; }
+  .card:hover .issuer-logo, .card:hover .issuer-mark, .card:hover .logo { rotate: -8deg; scale: 1.15; }
+  .card:hover .ini, .quote:hover .ini { rotate: 360deg; scale: 1.2; }
+  .card .card-links a:hover { translate: 0 -1px; }
+
+  /* ── GitHub dots: the one under the cursor swells ── */
+  .gh-grid i:hover::before { scale: 2.4; }
+
+  /* ── Contact and footer ── */
+  .hbtn:hover { translate: 0 -3px; rotate: -1.5deg; box-shadow: 0 10px 18px -10px rgb(0 0 0 / 0.45); }
+  .hbtn.solid:hover { rotate: 1.5deg; }
+  .foot button:hover { translate: 0 -2px; }
+  .hello .reply .btn:hover { translate: 0 -3px; rotate: -1.5deg; }
+  .hello .reply label:hover { color: var(--ink); }
+
+  /* ── Overlays: search palette and tour ── */
+  .panel .results a:hover { background: var(--chip); translate: 5px 0; }
+  .panel .close:hover { rotate: 90deg; scale: 1.25; }
+  .tour button:hover { scale: 1.1; rotate: -2deg; }
+}
+
+/* Press feedback: a button gives under the finger or mouse button (allowed when motion is). */
+@media (prefers-reduced-motion: no-preference) {
+  .home :is(.hbtn, .htag, .cap-toggle, .stackx-filters button, .pill, .stackx-tag.has-used, .btn):active { scale: 0.94; }
+}

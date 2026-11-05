@@ -290,7 +290,7 @@ html:has(.home) body {
 .stackx-used[hidden] { display: none; }
 .stackx-used a:hover { text-decoration: underline; text-underline-offset: 3px; }
 /* A hover bridge so the mouse can travel from the tag to the card without it closing. */
-.stackx-used::before { content: ""; position: absolute; left: 0; right: 0; top: -8px; height: 8px; }
+.stackx-used::before { content: ""; position: absolute; left: 0; right: 0; top: -6px; height: 6px; } /* exactly the gap: it must not overlap the tag */
 @keyframes used-in { from { opacity: 0; transform: translateY(-4px) scale(0.97); } }
 
 /* Tools strip: two copies of the row slide left forever; hover or focus pauses it. */
@@ -323,6 +323,10 @@ html:has(.home) body {
 .card .verify { font: 500 10px/1 var(--data); letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); margin-top: 6px; }
 a.card .verify { color: var(--muted); }
 a.card:hover .verify { color: var(--ink); }
+.card .card-links { display: flex; gap: 14px; }
+.card .card-links a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.issuer-mark { display: grid; place-items: center; height: 36px; margin-bottom: 8px; }
+.issuer-mark .lg-mark { width: 30px; height: 30px; }
 .quote { text-align: left; align-items: stretch; gap: 0; }
 .quote .mark { font: 32px/0.6 var(--head); color: var(--dot); height: 18px; }
 .quote q { quotes: none; font: italic 15px/1.6 var(--head); color: var(--muted); margin: 8px 0 18px; flex: 1; }

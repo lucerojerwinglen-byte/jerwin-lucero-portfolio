@@ -8,7 +8,7 @@ import { experience } from "@/content/data/experience";
 import { education } from "@/content/data/education";
 import { credentials } from "@/content/data/credentials";
 import { skills } from "@/content/data/skills";
-import { toolsIUse } from "@/content/home/home";
+import { anthropicCerts, toolsIUse } from "@/content/home/home";
 import { searchItems } from "@/lib/home/search-items";
 import type { Project, ProjectSection } from "@/types/content";
 import { Sidebar } from "./Sidebar";
@@ -166,10 +166,27 @@ export function ExperienceList() {
 
 export function CertificationsList() {
   return (
-    <div className="cards">
-      {credentials.map((c) => (
-        <CredentialCard key={c.title} c={c} />
-      ))}
-    </div>
+    <>
+      <section className="sec" aria-labelledby="ai-learning">
+        <div className="sec-head">
+          <h2 id="ai-learning">AI learning</h2>
+        </div>
+        <div className="cards">
+          {anthropicCerts.map((c) => (
+            <CredentialCard key={c.title} c={c} />
+          ))}
+        </div>
+      </section>
+      <section className="sec" aria-labelledby="certs-seminars">
+        <div className="sec-head">
+          <h2 id="certs-seminars">certifications &amp; seminars</h2>
+        </div>
+        <div className="cards">
+          {credentials.map((c) => (
+            <CredentialCard key={c.title} c={c} />
+          ))}
+        </div>
+      </section>
+    </>
   );
 }

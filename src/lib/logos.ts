@@ -103,6 +103,8 @@ export const LOGOS: Record<string, LogoSpec> = {
   GitHub: i("github-icon", true),
   WordPress: i("wordpress-icon"),
   "MS Office": { file: "/logos/tech/microsoft-365.svg" },
+  // Issuers shown as a brand mark rather than a file (certificates)
+  Anthropic: i("anthropic-icon", true),
   // Tools I use (homepage strip)
   "Claude Code": i("claude-icon"),
   "VS Code": i("visual-studio-code"),
