@@ -15,7 +15,7 @@ const serif = Source_Serif_4({
   axes: ["opsz"],
 });
 
-const title = `${site.shortName} — ${site.focus}`;
+const title = site.shortName; // the tab and link previews say just the name; the description carries the rest
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
