@@ -6,6 +6,7 @@ import { experience } from "@/content/data/experience";
 import { credentials } from "@/content/data/credentials";
 import {
   affiliations,
+  anthropicCerts,
   badges,
   featured,
   hero,
@@ -27,7 +28,7 @@ import { stackGroups, usedInLink } from "@/lib/home/used-in";
 import { CopyEmail, TourAgain } from "./Buttons";
 import { Logo, LogoMark } from "./Logo";
 import { parseHero } from "@/lib/home/hero";
-import { requireLogo } from "@/lib/logos";
+import { logoFor, requireLogo } from "@/lib/logos";
 import { ReplyForm } from "@/components/web/ReplyForm";
 
 /** Hero markup → text with a typed title, logo pills, highlighted words and stacked logos. */
@@ -338,6 +339,14 @@ export function Experience() {
 }
 
 export function IssuerLogo({ issuer }: { issuer: string }) {
+  const brand = logoFor(issuer); // a brand mark from the logo set (Anthropic), else a file or initials
+  if (brand) {
+    return (
+      <span className="issuer-mark" aria-hidden="true">
+        <LogoMark spec={brand} label={issuer} />
+      </span>
+    );
+  }
   const file = issuerLogo(issuer);
   return file ? (
     // eslint-disable-next-line @next/next/no-img-element -- small local logo; alt is empty because the issuer is printed below it
@@ -350,13 +359,34 @@ export function IssuerLogo({ issuer }: { issuer: string }) {
 }
 
 export function CredentialCard({ c }: { c: Credential }) {
-  const inner = (
+  const head = (
     <>
       <IssuerLogo issuer={c.issuer} />
       <span className="ct">{c.title}</span>
       <span className="caps">
         {c.issuer} · {c.date}
       </span>
+    </>
+  );
+  // Verify page and PDF copy: two links, so the card itself is not a link (no nested anchors).
+  if (c.verifyUrl && c.pdfPath) {
+    return (
+      <div className="card">
+        {head}
+        <span className="verify card-links">
+          <a href={c.verifyUrl} target="_blank" rel="noreferrer" aria-label={`Verify ${c.title} (opens the issuer's page)`}>
+            verify ↗
+          </a>
+          <a href={c.pdfPath} target="_blank" rel="noreferrer" aria-label={`${c.title} certificate, PDF`}>
+            pdf ↗
+          </a>
+        </span>
+      </div>
+    );
+  }
+  const inner = (
+    <>
+      {head}
       <span className="verify">{c.verifyUrl ? "‹ verify ›" : c.kind}</span>
     </>
   );
@@ -369,10 +399,13 @@ export function CredentialCard({ c }: { c: Credential }) {
   );
 }
 
+/** Homepage: the four Anthropic certificates, plus the Civil Service result and the Git & GitHub seminar (both have real logos). */
+const homeCredentials = [...anthropicCerts, ...credentials.filter((c) => c.issuer === "CSC" || c.issuer === "BU College of Science")];
+
 export function Certifications() {
   return (
     <div className="cards">
-      {credentials.slice(0, 3).map((c) => (
+      {homeCredentials.map((c) => (
         <CredentialCard key={c.title} c={c} />
       ))}
     </div>

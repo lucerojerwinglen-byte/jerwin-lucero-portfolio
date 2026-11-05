@@ -1,4 +1,5 @@
 import { projects } from "@/content/data/projects";
+import type { Credential } from "@/types/content";
 
 // Homepage-only content (ADR 0005, 0006). Kept outside src/content/data/ on purpose: that folder
 // is part of the résumé PDF fingerprint, and nothing here is printed.
@@ -103,6 +104,26 @@ export const featured: FeaturedCard[] = [
   { kind: "project", slug: "team-ops-suite", icon: { generic: "layers" } },
   { kind: "placeholder", title: "Next app", text: "Something new is in the works. Check back soon." },
 ];
+
+/**
+ * Anthropic Education certificates (Skilljar), newest first. Website only: the résumé's credentials
+ * list and PDF are unchanged. Each has a verify page and a PDF copy in public/certificates/.
+ * Facts come from the verify pages (student, course, issuer "Anthropic Education", completion date);
+ * they show no hours or skills, so none are listed.
+ */
+export const anthropicCerts: Credential[] = [
+  { title: "Claude Code in Action", code: "xzr59ivru6vt", file: "certificate-xzr59ivru6vt-1779999271.pdf" },
+  { title: "Introduction to agent skills", code: "qou948znnok3", file: "certificate-qou948znnok3-1779913978.pdf" },
+  { title: "Introduction to subagents", code: "usrq3bdvoc36", file: "certificate-usrq3bdvoc36-1779889053.pdf" },
+  { title: "Claude Code 101", code: "ksn8tc85for4", file: "certificate-ksn8tc85for4-1779745324.pdf" },
+].map(({ title, code, file }) => ({
+  title,
+  issuer: "Anthropic",
+  date: "May 2026",
+  kind: "certification" as const,
+  verifyUrl: `https://verify.skilljar.com/c/${code}`,
+  pdfPath: `/certificates/${file}`,
+}));
 
 /** Certification issuer → logo file in public/, or null to show initials (no logo source yet). */
 export const issuerLogos: Record<string, string | null> = {

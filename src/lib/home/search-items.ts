@@ -11,7 +11,7 @@ export function searchItems(home: "" | "/" = ""): SearchItem[] {
     ...numberSections(sections).map((s) => ({ title: sectionLabel(s), kind: "section" as const, href: `${home}#${s.id}` })),
     { title: "All projects", kind: "page", href: "/projects", keywords: "apps work research portfolio" },
     { title: "Experience", kind: "page", href: "/experience", keywords: "work jobs stack skills education history" },
-    { title: "Certifications", kind: "page", href: "/certifications", keywords: "credentials seminars workshops civil service" },
+    { title: "Certifications", kind: "page", href: "/certifications", keywords: "credentials seminars workshops civil service anthropic claude code subagents agent skills" },
     { title: "Résumé", kind: "page", href: "/resume", keywords: "cv" },
     { title: "Résumé PDF", kind: "file", href: site.resumePdfPath, keywords: "download cv print" },
     { title: "Contact", kind: "section", href: `${home}#hello`, keywords: "email hire message say hello" },

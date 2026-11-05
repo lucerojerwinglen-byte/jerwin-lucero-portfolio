@@ -3,6 +3,7 @@
    Tailwind stays for its reset, utilities like sr-only, and blog prose. */
 @import "../styles/document.css";
 @import "../styles/home.css";
+@import "../styles/hover.css";
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:where(.dark, .dark *));

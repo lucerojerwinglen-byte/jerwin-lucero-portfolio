@@ -51,6 +51,8 @@ export interface Credential {
   date: string;
   kind: "certification" | "seminar";
   verifyUrl?: string;
+  /** A copy of the certificate in public/ (homepage only). */
+  pdfPath?: string;
 }
 
 export interface Skill {
