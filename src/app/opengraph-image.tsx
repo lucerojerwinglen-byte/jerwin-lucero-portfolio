@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { site } from "@/content/data/site";
+import { RoleLine } from "@/components/og/RoleLine";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -27,9 +28,7 @@ export default async function Image() {
             <span>Page 1 / 2</span>
           </div>
           <div style={{ fontSize: 76, fontWeight: 700, marginTop: 56, letterSpacing: -1 }}>{site.name}</div>
-          <div style={{ display: "flex", fontSize: 32, marginTop: 18, fontFamily: "sans-serif" }}>
-            <b style={{ marginRight: 12 }}>{site.focus}</b>— {site.title}
-          </div>
+          <RoleLine />
           <div style={{ height: 3, background: "#1b1b1a", marginTop: 36 }} />
           <div style={{ fontSize: 26, color: "#1f3a8a", marginTop: 28, fontFamily: "monospace" }}>{site.domain}</div>
         </div>
