@@ -120,3 +120,29 @@ only, off for touch and reduced motion.
 **CPT Tools**:
 The 8-app internal suite (formerly "Team Operations Suite"). Named, but never shown with the
 employer's logo, links or screenshots.
+
+**Person data**:
+The schema.org Person JSON-LD on the homepage, plus `llms.txt` generated from the content files
+(ADR 0007). What search engines and AI tools read about Jerwin. _Avoid_: SEO tags, structured data.
+
+**Ask pill**:
+The floating "Ask" button, bottom-right, that opens the Ask palette (ADR 0007). Not a chat.
+_Avoid_: chat bot, assistant.
+
+**Accessibility panel**:
+The `Aa` button beside the theme switch with Larger text, Reduce motion and Readable font,
+remembered per visitor (ADR 0007). Larger text works through `--text-scale`.
+
+**Method**:
+The "Ask. Prove. Ship." section, "how I work", right after projects (ADR 0007).
+
+**FAQ**:
+The accordion of recruiter questions above the reply form in "say hello". Answers are Jerwin's
+own words, never drafted for him.
+
+**Project sheet**:
+A project's case study at `/projects/<slug>`: a sheet over the page when clicked, a full page
+when opened cold (ADR 0007). _Avoid_: modal, project page.
+
+**Flow diagram**:
+The GSAP-drawn picture of CPT Tools inside its Project sheet. Public facts only.
