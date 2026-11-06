@@ -8,7 +8,8 @@
     "pdf": "tsx scripts/generate-resume-pdf.ts",
     "start": "next start",
     "lint": "eslint",
-    "test": "tsx --test \"src/**/*.test.ts\""
+    "test": "tsx --test \"src/**/*.test.ts\"",
+    "test:browser": "tsx scripts/test-browser.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.8.0",
@@ -17,6 +18,7 @@
     "clsx": "^2.1.1",
     "geist": "^1.9.1",
     "gray-matter": "^4.0.3",
+    "gsap": "^3.15.1",
     "lucide-react": "^1.31.0",
     "next": "16.3.1",
     "next-mdx-remote": "^6.0.0",

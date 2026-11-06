@@ -1,7 +1,7 @@
 // Server-only (reads blog files): everything the Alt+K box can find, for any page that renders <Overlays />.
 import { site } from "@/content/data/site";
 import { projects } from "@/content/data/projects";
-import { numberSections, sectionLabel, sections, soonPages } from "@/content/home/home";
+import { faq, numberSections, sectionLabel, sections, soonPages } from "@/content/home/home";
 import { getAllPosts } from "@/lib/blog";
 import type { SearchItem } from "./search";
 
@@ -18,10 +18,11 @@ export function searchItems(home: "" | "/" = ""): SearchItem[] {
     ...projects.map((p) => ({
       title: p.title,
       kind: "project" as const,
-      href: `/projects#${p.slug}`,
+      href: `/projects/${p.slug}`,
       keywords: `${p.description} ${p.tags.join(" ")}`,
     })),
     ...getAllPosts().map((p) => ({ title: p.title, kind: "post" as const, href: `/blog/${p.slug}`, keywords: p.tags.join(" ") })),
+    ...faq.map((f) => ({ title: f.q, kind: "faq" as const, href: `${home}#${f.id}`, keywords: `${f.keywords} ${f.a}` })),
     ...soonPages.map((p) => ({ title: p.title, kind: "page" as const, href: `/${p.slug}`, keywords: "coming soon" })),
   ];
 }

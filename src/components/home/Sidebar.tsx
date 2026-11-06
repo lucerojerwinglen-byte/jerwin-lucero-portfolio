@@ -23,6 +23,7 @@ import { site } from "@/content/data/site";
 import { numberSections, sectionLabel, sections, soonPages, type SoonSlug } from "@/content/home/home";
 import { usePresence } from "@/components/web/usePresence";
 import { openOverlay } from "./events";
+import { DisplayPanel } from "./DisplayPanel";
 
 // Typed by slug, so adding a coming-soon page without an icon fails the typecheck.
 const soonIcon: Record<SoonSlug, typeof ShoppingBag> = {
@@ -151,6 +152,7 @@ export function Sidebar({ onHome = true }: { onHome?: boolean }) {
               </button>
             ))}
           </div>
+          <DisplayPanel />
         </div>
         <p className="reach">For work, collabs &amp; everything else, reach me at</p>
         <a className="mail" href={`mailto:${site.email}`}>

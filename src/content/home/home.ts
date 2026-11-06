@@ -8,6 +8,7 @@ import type { Credential } from "@/types/content";
 export type SectionId =
   | "blog"
   | "projects"
+  | "method"
   | "experience"
   | "certifications"
   | "recommendations"
@@ -76,6 +77,91 @@ export const stats: Stat[] = [
     label: "recorded decisions",
     href: "/projects#team-ops-suite",
     evidence: { slug: "team-ops-suite", text: "58 recorded architecture decisions" },
+  },
+];
+
+export interface MethodStep {
+  title: string;
+  text: string;
+  /** What the evidence link says, e.g. "58 recorded decisions in CPT Tools". */
+  proof: string;
+  href: string;
+  /** `text` must appear in that project's description or details (method.test.ts). */
+  evidence: { slug: string; text: string };
+}
+
+const liveUrl = (slug: string) => projects.find((p) => p.slug === slug)?.liveUrl ?? `/projects#${slug}`;
+
+/** Method (ADR 0007): how Jerwin works, in the words agreed in the grilling session. */
+export const method: MethodStep[] = [
+  {
+    title: "Ask",
+    text: "Ask why until the decision is clear, then write it down.",
+    proof: "58 recorded decisions in CPT Tools",
+    href: "/projects#team-ops-suite",
+    evidence: { slug: "team-ops-suite", text: "58 recorded architecture decisions" },
+  },
+  {
+    title: "Prove",
+    text: "Write the check that proves it before the code.",
+    proof: "Barato checks every price before it ships",
+    href: "/projects#barato",
+    evidence: { slug: "barato", text: "validates prices" },
+  },
+  {
+    title: "Ship",
+    text: "Ship one small piece and watch it work.",
+    proof: "Lovewin, live",
+    href: liveUrl("lovewin"),
+    evidence: { slug: "lovewin", text: "end-to-end-encrypted" },
+  },
+];
+
+export interface FaqItem {
+  id: string;
+  q: string;
+  a: string;
+  /** Extra words the Ask palette matches on. */
+  keywords: string;
+}
+
+/** FAQ (ADR 0007). Jerwin's own answers from the grilling session; pinned by faq.test.ts. */
+export const faq: FaqItem[] = [
+  {
+    id: "faq-roles",
+    q: "What roles are you looking for?",
+    a: "Software engineering, QA, data and AI roles. Anywhere I can build and test real apps.",
+    keywords: "jobs hiring position software engineer qa data ai",
+  },
+  {
+    id: "faq-setup",
+    q: "On-site, hybrid or remote?",
+    a: "Hybrid in Metro Manila, or remote with hours that overlap UTC+8.",
+    keywords: "remote hybrid onsite office location manila timezone work setup",
+  },
+  {
+    id: "faq-start",
+    q: "When can you start?",
+    a: "30 days after an offer.",
+    keywords: "notice period availability start date",
+  },
+  {
+    id: "faq-code",
+    q: "Can I see your code?",
+    a: "Barato's code is public on GitHub. Lovewin is private, and I'm happy to walk you through it on a call. CPT Tools runs inside my employer, so I can explain how it works but can't share code, screenshots or links.",
+    keywords: "github source repository private walkthrough",
+  },
+  {
+    id: "faq-freelance",
+    q: "Do you take freelance or side projects?",
+    a: "Yes. Write to me below with what you need.",
+    keywords: "freelance contract side project consulting collab",
+  },
+  {
+    id: "faq-references",
+    q: "Can I talk to your references?",
+    a: "Yes, on request.",
+    keywords: "references recommendations referee vouch",
   },
 ];
 
@@ -181,9 +267,11 @@ export type SoonSlug = (typeof soonPages)[number]["slug"];
 export const sections: Section[] = [
   { id: "blog", title: "blog", more: { label: "All posts", href: "/blog" } },
   { id: "projects", title: "projects", more: { label: "All projects", href: "/projects" } },
+  { id: "method", title: "how I work" },
   { id: "experience", title: "experience", more: { label: "Full history", href: "/experience" } },
   { id: "certifications", title: "certifications", more: { label: "All certifications", href: "/certifications" } },
-  { id: "recommendations", title: "recommendations" },
+  // Hidden until one real quote exists (ADR 0007): empty "Coming soon" cards read as a gap.
+  { id: "recommendations", title: "recommendations", hidden: !recommendations.some((r) => r.kind === "real") },
   { id: "affiliations", title: "affiliations", hidden: affiliations.length === 0 },
   { id: "github", title: "github" },
 ];
