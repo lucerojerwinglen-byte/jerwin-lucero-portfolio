@@ -1,5 +1,6 @@
 import { numberSections, sections, type SectionId } from "@/content/home/home";
 import { searchItems } from "@/lib/home/search-items";
+import { personJsonLd } from "@/lib/home/profile";
 import { Sidebar } from "@/components/home/Sidebar";
 import { Overlays } from "@/components/home/Overlays";
 import {
@@ -12,6 +13,7 @@ import {
   Footer,
   GitHub,
   Hero,
+  Method,
   NumberedSection,
   Projects,
   Recommendations,
@@ -24,6 +26,7 @@ export const revalidate = 86400; // the GitHub graph refreshes daily
 const sectionBodies: Record<SectionId, () => React.ReactNode> = {
   blog: Blog,
   projects: Projects,
+  method: Method,
   experience: Experience,
   certifications: Certifications,
   recommendations: Recommendations,
@@ -34,6 +37,11 @@ const sectionBodies: Record<SectionId, () => React.ReactNode> = {
 export default function Home() {
   return (
     <div className="home">
+      <script
+        type="application/ld+json"
+        // Person data (ADR 0007). `<` is escaped so no string can close the script tag.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd()).replace(/</g, "\\u003c") }}
+      />
       <Sidebar />
       <main className="main" id="top">
         <span className="dots" aria-hidden="true" style={{ top: 0, right: 0, width: 420, height: 320 }} />

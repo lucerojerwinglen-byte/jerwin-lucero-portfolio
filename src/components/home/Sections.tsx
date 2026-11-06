@@ -11,6 +11,7 @@ import {
   featured,
   hero,
   issuerLogo,
+  method,
   recommendations,
   stats,
   toolsIUse,
@@ -26,6 +27,7 @@ import { Portrait } from "./Portrait";
 import { StackExplorer } from "./StackExplorer";
 import { stackGroups, usedInLink } from "@/lib/home/used-in";
 import { CopyEmail, TourAgain } from "./Buttons";
+import { Faq } from "./Faq";
 import { Logo, LogoMark } from "./Logo";
 import { parseHero } from "@/lib/home/hero";
 import { logoFor, requireLogo } from "@/lib/logos";
@@ -196,9 +198,15 @@ export function ProjectTags({ tags }: { tags: string[] }) {
 }
 
 /** The project's own links, or the internal note. Shared by the cards and /projects. */
-export function ProjectLinks({ p }: { p: Project }) {
+/** `sheet`: also link to the project's case study (ADR 0007); off inside the case study itself. */
+export function ProjectLinks({ p, sheet = true }: { p: Project; sheet?: boolean }) {
   return (
     <div className="plinks">
+      {sheet && (
+        <Link href={`/projects/${p.slug}`} scroll={false}>
+          case study →
+        </Link>
+      )}
       {p.internal && <span>employer-internal · no code or link</span>}
       {p.liveUrl && (
         <a href={p.liveUrl} target="_blank" rel="noreferrer">
@@ -301,6 +309,32 @@ export function ToolsStrip() {
         </div>
       </div>
     </div>
+  );
+}
+
+/** Method (ADR 0007): "Ask. Prove. Ship.", each step linked to its evidence. */
+export function Method() {
+  return (
+    <>
+      <p className="method-lede">
+        {method.map((s) => `${s.title}.`).join(" ")}
+      </p>
+      <ol className="method">
+        {method.map((s, i) => {
+          const external = s.href.startsWith("http");
+          return (
+            <li key={s.title}>
+              <span className="caps">0{i + 1}</span>
+              <h3>{s.title}.</h3>
+              <p>{s.text}</p>
+              <a href={s.href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+                {s.proof} {external ? "↗" : <ArrowRight className="ico" aria-hidden="true" />}
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+    </>
   );
 }
 
@@ -500,7 +534,9 @@ export function Contact() {
     <section className="hello" aria-labelledby="hello">
       <span className="caps">Get in touch</span>
       <h2 id="hello">say hello</h2>
-      <p>Building something, hiring, or just want to talk shop? I usually reply within a day (UTC+8).</p>
+      <p>
+        Building something, hiring, or just want to talk shop? I usually reply within a day (UTC+8). References available on request.
+      </p>
       <div className="row">
         <span className="mono">{site.email}</span>
         <CopyEmail email={site.email} />
@@ -509,6 +545,7 @@ export function Contact() {
           Open mail app
         </a>
       </div>
+      <Faq />
       <ReplyForm />
     </section>
   );

@@ -61,10 +61,26 @@ export function Overlays({ items }: { items: SearchItem[] }) {
     };
   }, [show]);
 
-  if (open === "ask") return <Ask items={items} onClose={close} />;
-  if (open === "typing") return <Typing onClose={close} />;
-  if (open === "tour") return <Tour onClose={close} />;
-  return null;
+  return (
+    <>
+      <AskPill hidden={open !== null} onAsk={() => show("ask")} />
+      {open === "ask" && <Ask items={items} onClose={close} />}
+      {open === "typing" && <Typing onClose={close} />}
+      {open === "tour" && <Tour onClose={close} />}
+    </>
+  );
+}
+
+/** Ask pill (ADR 0007): makes the Ask palette findable without the menu or a keyboard. Not a chat. */
+function AskPill({ hidden, onAsk }: { hidden: boolean; onAsk: () => void }) {
+  return (
+    <button type="button" className="ask-pill" hidden={hidden} onClick={onAsk} aria-label="Ask anything (Alt+K)">
+      <Search className="ico" aria-hidden="true" />
+      <span>Ask</span>
+      <kbd>Alt</kbd>
+      <kbd>K</kbd>
+    </button>
+  );
 }
 
 /** A real modal: the page behind is `inert` (no focus, no clicks, hidden from screen readers) until it closes. */
@@ -101,7 +117,9 @@ function Ask({ items, onClose }: { items: SearchItem[]; onClose: () => void }) {
     if (item.kind === "file") {
       window.location.href = item.href; // a file, not a page: let the browser open it
     } else if (item.href.startsWith("#")) {
-      document.querySelector(item.href)?.scrollIntoView({ behavior: scrollBehavior() });
+      const target = document.querySelector(item.href);
+      if (target instanceof HTMLDetailsElement) target.open = true; // a FAQ answer: show it
+      target?.scrollIntoView({ behavior: scrollBehavior() });
       history.replaceState(null, "", item.href);
     } else router.push(item.href);
   };

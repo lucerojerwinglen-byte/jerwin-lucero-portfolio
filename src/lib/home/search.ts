@@ -1,6 +1,6 @@
 export interface SearchItem {
   title: string;
-  kind: "section" | "page" | "project" | "post" | "file";
+  kind: "section" | "page" | "project" | "post" | "file" | "faq";
   href: string;
   keywords?: string;
 }
